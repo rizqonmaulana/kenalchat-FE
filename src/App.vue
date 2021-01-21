@@ -1,32 +1,90 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/login">Login</router-link>
-    </div>
     <router-view />
   </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+
+* {
+  font-family: "Rubik", sans-serif;
 }
 
-#nav {
-  padding: 30px;
+.button {
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 70px;
+  outline: unset;
+  padding: 12px 0;
+  transition-duration: 0.6s;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.btn-blue {
+  border: unset;
+  background-color: #7e98df;
+  color: #fff;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.btn-blue:hover {
+  background-color: #5678d8;
+  -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.34);
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.34);
+}
+
+.btn-white {
+  background-color: #fff;
+  color: #7e98df;
+  border: 1px solid #7e98df;
+}
+
+.btn-white:hover {
+  background-color: #fff;
+  border: 1px solid #7e98df;
+  color: #557adf;
+  -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.34);
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.34);
+}
+
+.text-header-blue {
+  font-weight: 500;
+  font-size: 22px;
+  color: #7e98df;
+}
+
+.input-border-bot {
+  border-top: unset;
+  border-right: unset;
+  border-left: unset;
+  border-bottom: 1px solid #232323;
+  padding-bottom: 4px;
+  outline: unset;
+  transition-duration: 0.8s;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 30px;
+  color: #232323;
+}
+
+.input-border-bot:focus {
+  border-bottom: 1px solid #557adf;
+  box-shadow: 0px 1px #557adf;
+}
+
+.text {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.text-black {
+  color: #232323;
+}
+
+.text-grey {
+  color: #848484;
+}
+
+.text-blue {
+  color: #7e98df;
 }
 </style>
