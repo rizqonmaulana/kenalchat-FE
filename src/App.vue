@@ -15,7 +15,7 @@
   font-size: 16px;
   font-weight: 500;
   border-radius: 70px;
-  outline: unset;
+  outline: unset !important;
   padding: 12px 0;
   transition-duration: 0.6s;
 }
@@ -86,5 +86,37 @@
 
 .text-blue {
   color: #7e98df;
+}
+
+a {
+  text-decoration: unset !important;
+}
+
+input {
+  outline: unset;
+}
+
+button {
+  outline: unset;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(177, 177, 177);
 }
 </style>
