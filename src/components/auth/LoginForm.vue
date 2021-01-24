@@ -13,6 +13,7 @@
               Email
             </label>
             <input
+              v-model="form.userEmail"
               class="input-border-bot mb-4"
               type="email"
               name="email"
@@ -22,9 +23,14 @@
             <label class="text text-grey">
               Password
             </label>
-            <input class="input-border-bot" type="password" name="password" />
+            <input
+              v-model="form.userPassword"
+              class="input-border-bot"
+              type="password"
+              name="password"
+            />
             <p class="text-right text-blue mt-4">Forgot password ?</p>
-            <button class="button btn-blue my-3">
+            <button @click="loginUser" class="button btn-blue my-3">
               Login
             </button>
             <div class="d-flex justify-content-between">
@@ -50,6 +56,36 @@
     </b-container>
   </div>
 </template>
+
+<script>
+import { mapActions } from "vuex";
+import { alert } from "../../mixins/alert";
+
+export default {
+  mixins: [alert],
+  data() {
+    return {
+      form: {
+        userEmail: "",
+        userPassword: "",
+      },
+    };
+  },
+  methods: {
+    ...mapActions(["login"]),
+    loginUser() {
+      this.login(this.form)
+        .then((result) => {
+          this.successAlert(result.data.msg);
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          this.errorAlert(error.data.msg);
+        });
+    },
+  },
+};
+</script>
 
 <style scoped>
 .main {
