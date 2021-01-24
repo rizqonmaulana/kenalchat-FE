@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div
-      v-b-modal.friendProfile
-      class="header d-flex align-items-center py-3"
-      style="border: unset;"
-    >
+    <div v-b-modal.friendProfile class="header d-flex align-items-center py-3">
       <div class="d-img">
         <img
           src="../../assets/img-profile2.png"
@@ -42,6 +38,22 @@
         <p class="text-grey mt-2">
           +628989 8989 8989
         </p>
+        <div class="map text-center mt-3">
+          <GmapMap
+            :center="coordinate"
+            :zoom="10"
+            map-type-id="terrain"
+            style="width: 100%; height: 180px"
+          >
+            <GmapMarker
+              :position="coordinate"
+              :clickable="true"
+              :draggable="true"
+              @click="clickMarker"
+              icon="https://img.icons8.com/color/48/000000/map-pin.png"
+            />
+          </GmapMap>
+        </div>
       </div>
     </b-modal>
 
@@ -277,9 +289,46 @@
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      coordinate: {
+        lat: 10,
+        lng: 10,
+      },
+    };
+  },
+  created() {
+    this.$getLocation()
+      .then((coordinates) => {
+        this.coordinate = {
+          lat: coordinates.lat,
+          lng: coordinates.lng,
+        };
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  },
+  methods: {
+    clickMarker(position) {
+      this.coordinate = {
+        lat: position.latLng.lat(),
+        lng: position.latLng.lng(),
+      };
+    },
+  },
+};
+</script>
+
 <style scoped>
 .header {
   height: 10vh;
+}
+
+.header:focus {
+  outline: none !important;
 }
 
 .msg-content {
@@ -380,5 +429,11 @@ input {
   padding: 15px;
   font-size: 14px;
   max-width: 40vw;
+}
+
+@media (max-width: 992px) {
+  .d-name {
+    margin-left: 40px;
+  }
 }
 </style>

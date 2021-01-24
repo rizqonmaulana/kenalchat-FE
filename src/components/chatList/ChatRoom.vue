@@ -17,7 +17,7 @@
             >
               <div
                 v-b-modal.contact
-                class="d-flex align-items-center my-2 menu-option"
+                class="d-flex  hide-outline align-items-center my-2 menu-option"
               >
                 <div class="setting-icon text-right mr-2">
                   <img src="../../assets/icon-contact.png" />
@@ -30,7 +30,7 @@
               </div>
               <div
                 v-b-modal.addFriend
-                class="d-flex align-items-center my-2 menu-option"
+                class="d-flex   hide-outline align-items-center my-2 menu-option"
               >
                 <div class="setting-icon text-right mr-2">
                   <img
@@ -459,7 +459,7 @@
         </b-modal>
       </div>
       <!-- profile -->
-      <div v-else style="margin-top: -30px;">
+      <div v-else style="margin-top: -50px;">
         <h5 class="text-black">
           Account
         </h5>
@@ -475,7 +475,10 @@
         </p>
         <h5 class="text-black mt-3 mb-2">Settings</h5>
 
-        <div v-b-modal.profile class="d-flex flex-row align-items-center my-2 ">
+        <div
+          v-b-modal.profile
+          class="d-flex  hide-outline flex-row align-items-center my-2 "
+        >
           <div class="setting-icon text-center">
             <img src="../../assets/icon-profile.png" />
           </div>
@@ -486,7 +489,10 @@
             <img src="../../assets/icon-back.png" />
           </div>
         </div>
-        <div v-b-modal.my-modal class="d-flex flex-row align-items-center">
+        <div
+          v-b-modal.my-modal
+          class="d-flex hide-outline flex-row align-items-center"
+        >
           <div class="setting-icon text-center">
             <img src="../../assets/icon-lock.png" />
           </div>
@@ -496,6 +502,22 @@
           <div class="setting-icon2">
             <img src="../../assets/icon-back.png" />
           </div>
+        </div>
+        <div class="map py-2">
+          <GmapMap
+            :center="coordinate"
+            :zoom="10"
+            map-type-id="terrain"
+            style="width: 100%; height: 180px"
+          >
+            <GmapMarker
+              :position="coordinate"
+              :clickable="true"
+              :draggable="true"
+              @click="clickMarker"
+              icon="https://img.icons8.com/color/48/000000/map-pin.png"
+            />
+          </GmapMap>
         </div>
 
         <!-- change profile -->
@@ -566,7 +588,23 @@ export default {
     return {
       showSetting: 0,
       profile: 0,
+      coordinate: {
+        lat: 10,
+        lng: 10,
+      },
     };
+  },
+  created() {
+    this.$getLocation()
+      .then((coordinates) => {
+        this.coordinate = {
+          lat: coordinates.lat,
+          lng: coordinates.lng,
+        };
+      })
+      .catch((error) => {
+        alert(error);
+      });
   },
   methods: {
     showMenu() {
@@ -578,6 +616,12 @@ export default {
     showProfileAndCloseMenu() {
       this.profile = 1;
       this.showSetting = 0;
+    },
+    clickMarker(position) {
+      this.coordinate = {
+        lat: position.latLng.lat(),
+        lng: position.latLng.lng(),
+      };
     },
   },
 };
@@ -615,7 +659,7 @@ input {
   color: #848484;
   font-size: 14px;
   background: #fafafa;
-  width: 150px;
+  width: 80%;
 }
 
 .contact-list img.profile-img {
@@ -737,5 +781,19 @@ input {
 .button,
 .btn-blue {
   padding: 5px;
+}
+
+.hide-outline:focus {
+  outline: none !important;
+}
+
+@media (max-width: 768px) {
+  input {
+    width: 70%;
+  }
+
+  .d-image img.profile-img {
+    margin-right: 5px;
+  }
 }
 </style>

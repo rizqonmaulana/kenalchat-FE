@@ -100,6 +100,10 @@ button {
   outline: unset;
 }
 
+.modal-backdrop {
+  opacity: 0.5 !important;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 5px;
