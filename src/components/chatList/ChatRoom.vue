@@ -91,7 +91,7 @@
             />
           </div>
           <h5 class="text-black mt-2 text-profile-name">
-            Rizqon Maulana
+            {{ getUser.userEmail }}
           </h5>
           <p class="text-grey text-username">
             @rizqonmaulana
@@ -120,201 +120,29 @@
       </div>
       <!-- contact list -->
       <div v-if="profile !== 1" class="contact-list">
-        <div class="d-flex justify-content-between my-3">
+        <div
+          v-for="(item, index) in getFriendList"
+          :key="index"
+          class="d-flex justify-content-between my-3"
+        >
           <div class="d-image">
             <img
-              src="../../assets/img-profile6.png"
+              :src="
+                item.user_pic === null
+                  ? 'http://localhost:3000/user/icon-user.png'
+                  : 'http://localhost:3000/' + item.user_pic
+              "
               class="profile-img rounded-circle"
             />
           </div>
           <div class="d-name">
-            <p class="text-black chat-name">Theresa Webb</p>
+            <p class="text-black chat-name">{{ item.user_name }}</p>
             <p class="text-blue chat-content">why u did it?</p>
           </div>
           <div class="d-time text-right mr-2">
             <p class="text-grey text-time">15:20</p>
             <div class="rounded-circle notif text-center ml-auto">
               <p class="text-notif">5</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile6.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Theresa Webb</p>
-            <p class="text-blue chat-content">why u did it?</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">15:20</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">5</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile6.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Theresa Webb</p>
-            <p class="text-blue chat-content">why u did it?</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">15:20</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">5</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile6.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Theresa Webb</p>
-            <p class="text-blue chat-content">why u did it?</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">15:20</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">5</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile6.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Theresa Webb</p>
-            <p class="text-blue chat-content">why u did it?</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">15:20</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">5</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile6.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Theresa Webb</p>
-            <p class="text-blue chat-content">why u did it?</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">15:20</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">5</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile2.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">John Arm</p>
-            <p class="text-blue chat-content">r u ok?</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">15:10</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">3</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile3.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Danny Granger</p>
-            <p class="text-blue chat-content">it works bro</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">14:40</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">2</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile4.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Alfa</p>
-            <p class="text-blue chat-content">When u come ?</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">14:20</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">1</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile5.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Derby Romeo</p>
-            <p class="text-blue chat-content">whats up ?</p>
-          </div>
-          <div class="d-timetext-right mr-2">
-            <p class="text-grey text-time">14:10</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">2</p>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between my-3">
-          <div class="d-image">
-            <img
-              src="../../assets/img-profile6.png"
-              class="profile-img rounded-circle"
-            />
-          </div>
-          <div class="d-name">
-            <p class="text-black chat-name">Nicole</p>
-            <p class="text-blue chat-content">it's great</p>
-          </div>
-          <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">13:59</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">10</p>
             </div>
           </div>
         </div>
@@ -345,113 +173,25 @@
             <h5 class="text-blue">My contact</h5>
             <b-container>
               <b-row>
-                <b-col col lg="2" md="4" sm="8" cols="12">
+                <b-col
+                  v-for="(item, index) in getFriendList"
+                  :key="index"
+                  col
+                  lg="2"
+                  md="4"
+                  sm="8"
+                  cols="12"
+                >
                   <div class="card-contact text-center mt-3">
                     <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
+                      :src="
+                        item.user_pic === null
+                          ? 'http://localhost:3000/user/icon-user.png'
+                          : 'http://localhost:3000/' + item.user_pic
+                      "
+                      class="profile-img rounded-circle"
                     />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
-                    <button class="button btn-blue">Chat</button>
-                  </div>
-                </b-col>
-                <b-col col lg="2" md="4" sm="8" cols="12">
-                  <div class="card-contact text-center mt-3">
-                    <img
-                      class="rounded-circle"
-                      src="../../assets/img-profile2.png"
-                    />
-                    <p class="text-black my-2">Mother</p>
+                    <p class="text-black my-2">{{ item.user_name }}</p>
                     <button class="button btn-blue">Chat</button>
                   </div>
                 </b-col>
@@ -528,6 +268,7 @@
             <label>Username</label>
             <br />
             <input
+              v-model="formUser.userName"
               type="text"
               class="input-password"
               placeholder="Input new username"
@@ -536,6 +277,7 @@
             <label class="mt-3">Phone number</label>
             <br />
             <input
+              v-model="formUser.userPhone"
               type="number"
               class="input-password"
               placeholder="Input new phone number"
@@ -543,14 +285,15 @@
             <label class="mt-3">Bio</label>
             <br />
             <input
+              v-model="formUser.userBio"
               type="text"
               class="input-password"
               placeholder="Input new bio"
             />
             <label class="mt-3">Profile picture</label>
             <br />
-            <input type="file" class="input-password" />
-            <button class="button btn-blue mt-3">
+            <input type="file" @change="handleFile" class="input-password" />
+            <button @click="updateUser" class="button btn-blue mt-3">
               Save
             </button>
           </div>
@@ -607,12 +350,20 @@ export default {
       formFriend: {
         friendEmail: "",
       },
+      formUser: {
+        userName: "",
+        userPhone: "",
+        userBio: "",
+        userPic: "",
+      },
     };
   },
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["getUser", "getFriendList"]),
   },
   created() {
+    this.getContact();
+
     this.$getLocation()
       .then((coordinates) => {
         this.coordinate = {
@@ -625,10 +376,9 @@ export default {
       });
   },
   methods: {
-    ...mapActions(["patchPassword", "postFriend"]),
+    ...mapActions(["patchPassword", "patchUser", "postFriend", "getFriend"]),
     show() {
-      console.log(this.getUser);
-      console.log(this.formPassword);
+      console.log(this.getFriendList);
     },
     showMenu() {
       this.showSetting === 0 ? (this.showSetting = 1) : (this.showSetting = 0);
@@ -667,6 +417,37 @@ export default {
         ...this.formFriend,
       };
       this.postFriend(setData)
+        .then((result) => {
+          this.getContact();
+          this.successAlert(result.data.msg);
+        })
+        .catch((error) => {
+          this.errorAlert(error.data.msg);
+        });
+    },
+    getContact() {
+      const id = this.getUser.userId;
+      const data = {
+        userId: id,
+      };
+      this.getFriend(data);
+    },
+    handleFile(event) {
+      console.log(event);
+      this.formUser.userPic = event.target.files[0];
+    },
+    updateUser() {
+      const { userName, userPhone, userBio, userPic } = this.formUser;
+      const userEmail = this.getUser.userEmail;
+
+      const data = new FormData();
+      data.append("userEmail", userEmail);
+      data.append("userName", userName);
+      data.append("userPhone", userPhone);
+      data.append("userBio", userBio);
+      data.append("userPic", userPic);
+
+      this.patchUser(data)
         .then((result) => {
           this.successAlert(result.data.msg);
         })
@@ -827,6 +608,16 @@ input {
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.34);
   padding: 10px 20px;
   border-radius: 20px;
+  height: 180px;
+}
+
+.card-contact p {
+  height: 45px;
+}
+
+.card-contact .profile-img {
+  width: 60px;
+  height: 60px;
 }
 
 .button,

@@ -35,6 +35,8 @@ export default {
         axios
           .post(`${context.state.VUE_APP_ROOT_URL}/user/login`, payload)
           .then((result) => {
+            console.log(result.data.data);
+            console.log("ini dari login");
             context.commit("setUser", result.data.data);
             localStorage.setItem("token", result.data.data.token);
             resolve(result);
@@ -45,7 +47,6 @@ export default {
       });
     },
     patchPassword(context, payload) {
-      console.log(payload);
       return new Promise((resolve, reject) => {
         axios
           .patch(
@@ -53,6 +54,23 @@ export default {
             payload
           )
           .then((result) => {
+            resolve(result);
+          })
+          .catch((error) => {
+            reject(error.response);
+          });
+      });
+    },
+    patchUser(context, payload) {
+      console.log(payload);
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(
+            `${context.state.VUE_APP_ROOT_URL}/user/change/profile`,
+            payload
+          )
+          .then((result) => {
+            context.commit("setUser", result.data.data);
             console.log(result);
             resolve(result);
           })
