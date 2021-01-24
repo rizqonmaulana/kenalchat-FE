@@ -111,6 +111,7 @@
                   placeholder="Type your message..."
               /></span>
             </div>
+            <button @click="show">show</button>
           </div>
           <div>
             <img src="../../assets/icon-plus.png" />
@@ -326,12 +327,13 @@
             <label>User email</label>
             <br />
             <input
+              v-model="formFriend.friendEmail"
               type="email"
               class="input-password"
               placeholder="Input user email"
             />
             <br />
-            <button class="button btn-blue mt-3">
+            <button @click="addFriend" class="button btn-blue mt-3">
               Add
             </button>
           </div>
@@ -560,6 +562,7 @@
             <label>New password</label>
             <br />
             <input
+              v-model="formPassword.userPassword"
               type="password"
               class="input-password"
               placeholder="Input new password"
@@ -568,11 +571,12 @@
             <label class="mt-2">Confirm password</label>
             <br />
             <input
+              v-model="formPassword.userConfirmPassword"
               type="password"
               class="input-password"
               placeholder="Input confirm password"
             />
-            <button class="button btn-blue mt-3">
+            <button @click="updatePassword" class="button btn-blue mt-3">
               Save
             </button>
           </div>
@@ -583,7 +587,11 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import { alert } from "../../mixins/alert";
+
 export default {
+  mixins: [alert],
   data() {
     return {
       showSetting: 0,
@@ -592,7 +600,17 @@ export default {
         lat: 10,
         lng: 10,
       },
+      formPassword: {
+        userPassword: "",
+        userConfirmPassword: "",
+      },
+      formFriend: {
+        friendEmail: "",
+      },
     };
+  },
+  computed: {
+    ...mapGetters(["getUser"]),
   },
   created() {
     this.$getLocation()
@@ -607,6 +625,11 @@ export default {
       });
   },
   methods: {
+    ...mapActions(["patchPassword", "postFriend"]),
+    show() {
+      console.log(this.getUser);
+      console.log(this.formPassword);
+    },
     showMenu() {
       this.showSetting === 0 ? (this.showSetting = 1) : (this.showSetting = 0);
     },
@@ -622,6 +645,34 @@ export default {
         lat: position.latLng.lat(),
         lng: position.latLng.lng(),
       };
+    },
+    updatePassword() {
+      const userEmail = this.getUser.userEmail;
+      const setData = {
+        userEmail,
+        ...this.formPassword,
+      };
+      this.patchPassword(setData)
+        .then((result) => {
+          this.successAlert(result.data.msg);
+        })
+        .catch((error) => {
+          this.errorAlert(error.data.msg);
+        });
+    },
+    addFriend() {
+      const userId = this.getUser.userId;
+      const setData = {
+        userId,
+        ...this.formFriend,
+      };
+      this.postFriend(setData)
+        .then((result) => {
+          this.successAlert(result.data.msg);
+        })
+        .catch((error) => {
+          this.errorAlert(error.data.msg);
+        });
     },
   },
 };

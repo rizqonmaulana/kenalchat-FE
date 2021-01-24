@@ -278,7 +278,12 @@
       <div class="input-msg">
         <div class="d-flex justify-content-between align-items-center">
           <div class="msg">
-            <input type="text" placeholder="Type your message..." />
+            <input
+              v-model="message"
+              v-on:keyup.enter="sendMessage"
+              type="text"
+              placeholder="Type your message..."
+            />
           </div>
           <div class="icon text-center">
             <img src="../../assets/icon-plus.png" />
@@ -290,14 +295,41 @@
 </template>
 
 <script>
+import io from "socket.io-client";
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
+      socket: io("http://localhost:3000"),
+      message: "",
+      messages: [],
+      oldRoom: "",
+      typing: {
+        isTyping: false,
+      },
       coordinate: {
         lat: 10,
         lng: 10,
       },
     };
+  },
+  computed: {
+    ...mapGetters(["getUser"]),
+  },
+  watch: {
+    message(value) {
+      value
+        ? this.socket.emit("typing", {
+            username: this.getUser.userName,
+            room: this.getUser.userId,
+            isTyping: true,
+          })
+        : this.socket.emit("typing", {
+            room: this.getUser.userId,
+            isTyping: false,
+          });
+    },
   },
   created() {
     this.$getLocation()
@@ -310,8 +342,52 @@ export default {
       .catch((error) => {
         alert(error);
       });
+
+    if (!this.$route.params.username) {
+      this.$router.push("/");
+    }
+    this.getUser.userName = this.$route.params.username;
+    // console.log(this.$route.params);
+    this.socket.on("chatMessage", (data) => {
+      this.messages.push(data);
+    });
+    this.socket.on("typingMessage", (data) => {
+      this.typing = data;
+    });
   },
   methods: {
+    sendMessage() {
+      const setData = {
+        username: this.getUser.userName,
+        message: this.message,
+        room: this.getUser.userId,
+      };
+      // [1] menjalankan socket io untuk mendapatkan realtimenya
+      this.socket.emit("roomMessage", setData);
+      // [2] menjalankan proses axios post data ke table chat
+      // this.postMessage(setData)
+      this.message = "";
+    },
+    selectRoom(data) {
+      if (this.oldRoom) {
+        console.log("sudah pernah masuk ke room " + this.oldRoom);
+        console.log("dan akan masuk ke room " + data);
+        this.socket.emit("changeRoom", {
+          username: this.getUser.userName,
+          room: data,
+          oldRoom: this.oldRoom,
+        });
+        this.oldRoom = data;
+      } else {
+        console.log("belum pernah masuk ke ruang manapun");
+        console.log("dan akan masuk ke room " + data);
+        this.socket.emit("joinRoom", {
+          username: this.getUser.userName,
+          room: data,
+        });
+        this.oldRoom = data;
+      }
+    },
     clickMarker(position) {
       this.coordinate = {
         lat: position.latLng.lat(),

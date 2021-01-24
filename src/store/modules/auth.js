@@ -44,10 +44,31 @@ export default {
           });
       });
     },
+    patchPassword(context, payload) {
+      console.log(payload);
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(
+            `${context.state.VUE_APP_ROOT_URL}/user/change/password`,
+            payload
+          )
+          .then((result) => {
+            console.log(result);
+            resolve(result);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error.response);
+          });
+      });
+    },
   },
   getters: {
     isLogin(state) {
       return state.token !== null;
+    },
+    getUser(state) {
+      return state.user;
     },
   },
 };
