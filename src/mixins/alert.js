@@ -1,9 +1,9 @@
 import Swal from "sweetalert2";
 
-export const alertMixin = {
+export const alert = {
   methods: {
     successAlert(msg) {
-      Swal.fire(msg, "", "success");
+      Swal.fire("Success", msg, "success");
     },
     errorAlert(error) {
       Swal.fire({

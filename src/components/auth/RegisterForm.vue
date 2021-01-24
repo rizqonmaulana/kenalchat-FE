@@ -18,6 +18,7 @@
               Name
             </label>
             <input
+              v-model="form.userName"
               class="input-border-bot mb-4"
               type="text"
               name="name"
@@ -28,6 +29,7 @@
               Email
             </label>
             <input
+              v-model="form.userEmail"
               class="input-border-bot mb-4"
               type="email"
               name="email"
@@ -37,8 +39,23 @@
             <label class="text text-grey">
               Password
             </label>
-            <input class="input-border-bot" type="password" name="password" />
-            <button class="button btn-blue mb-3 mt-4">
+            <input
+              v-model="form.userPassword"
+              class="input-border-bot mb-4"
+              type="password"
+              name="password"
+            />
+            <br />
+            <label class="text text-grey">
+              Confirm password
+            </label>
+            <input
+              v-model="form.userConfirmPassword"
+              class="input-border-bot"
+              type="password"
+              name="password"
+            />
+            <button @click="registerUser" class="button btn-blue mb-3 mt-4">
               Register
             </button>
             <div class="d-flex justify-content-between">
@@ -60,6 +77,37 @@
     </b-container>
   </div>
 </template>
+
+<script>
+import { mapActions } from "vuex";
+import { alert } from "../../mixins/alert";
+
+export default {
+  mixins: [alert],
+  data() {
+    return {
+      form: {
+        userName: "",
+        userEmail: "",
+        userPassword: "",
+        userConfirmPassword: "",
+      },
+    };
+  },
+  methods: {
+    ...mapActions(["register"]),
+    registerUser() {
+      this.register(this.form)
+        .then((result) => {
+          this.successAlert(result.data.msg);
+        })
+        .catch((error) => {
+          this.errorAlert(error.data.msg);
+        });
+    },
+  },
+};
+</script>
 
 <style scoped>
 .main {
