@@ -13,8 +13,11 @@ export default {
       state.room = payload[0].room_id;
     },
     setUserReceiver(state, payload) {
+      console.log(payload);
+      console.log("ini payload");
       const data = {
-        user_id: payload[0].user_id,
+        user_id_to: payload[0].user_id_to,
+        user_id_from: payload[0].user_id_from,
         user_name: payload[0].user_name,
         user_pic: payload[0].user_pic,
         user_email: payload[0].user_email,

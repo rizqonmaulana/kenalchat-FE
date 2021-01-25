@@ -90,7 +90,11 @@
           <div class="img">
             <img
               @click="showProfile"
-              src="../../assets/img-profile1.png"
+              :src="
+                getUserDetail.user_pic === null
+                  ? 'http://localhost:3000/user/icon-user.png'
+                  : 'http://localhost:3000/user/' + getUserDetail.user_pic
+              "
               class="profile-img rounded-circle mt-2 pointer"
             />
           </div>
@@ -127,14 +131,17 @@
           v-for="(item, index) in getRoomList"
           :key="index"
           class="d-flex justify-content-between my-3 pointer"
-          @click="getChat(item.room_id, item.user_1)"
+          @click="
+            getChat(item.room_id, item.user_1);
+            getUserReceiver(item.user_email);
+          "
         >
           <div class="d-image">
             <img
               :src="
                 item.user_pic === null
                   ? 'http://localhost:3000/user/icon-user.png'
-                  : 'http://localhost:3000/' + item.user_pic
+                  : 'http://localhost:3000/user/' + item.user_pic
               "
               class="profile-img rounded-circle"
             />
@@ -198,7 +205,7 @@
                       :src="
                         item.user_pic === null
                           ? 'http://localhost:3000/user/icon-user.png'
-                          : 'http://localhost:3000/' + item.user_pic
+                          : 'http://localhost:3000/user/' + item.user_pic
                       "
                       class="profile-img rounded-circle"
                     />
@@ -390,6 +397,21 @@ export default {
       .catch((error) => {
         alert(error);
       });
+
+    this.$getLocation()
+      .then((coordinates) => {
+        if (coordinates.accuracy <= 300) {
+          const data = {
+            userEmail: this.getUser.userEmail,
+            userLat: coordinates.lat,
+            userLng: coordinates.lng,
+          };
+          this.patchUser(data);
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
   },
   methods: {
     ...mapActions([
@@ -401,6 +423,7 @@ export default {
       "getUserByEmail",
       "getRoom",
       "getChatByRoom",
+      "getUserReceiver",
     ]),
     show() {
       console.log(this.getUser);
@@ -528,6 +551,11 @@ input {
   font-size: 14px;
   background: #fafafa;
   width: 80%;
+}
+
+.profile-img {
+  height: 80px;
+  width: 80px;
 }
 
 .contact-list img.profile-img {

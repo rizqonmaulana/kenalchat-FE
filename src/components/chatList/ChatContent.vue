@@ -21,7 +21,7 @@
         <div class="d-name">
           <p class="text-black text-name">{{ receiver.user_name }}</p>
           <p class="text-blue text-status">Online</p>
-
+          {{ userReceiver }}
           <button @click="show">show</button>
         </div>
         <div class="d-menu">
@@ -62,13 +62,19 @@
           </p>
           <div class="map text-center mt-3">
             <GmapMap
-              :center="coordinate"
+              :center="{
+                lat: parseFloat(receiver.user_lat),
+                lng: parseFloat(receiver.user_lng),
+              }"
               :zoom="10"
               map-type-id="terrain"
               style="width: 100%; height: 180px"
             >
               <GmapMarker
-                :position="coordinate"
+                :position="{
+                  lat: parseFloat(receiver.user_lat),
+                  lng: parseFloat(receiver.user_lng),
+                }"
                 :clickable="true"
                 :draggable="true"
                 @click="clickMarker"
@@ -173,6 +179,7 @@ export default {
   computed: {
     ...mapGetters({
       getUser: "getUser",
+      userDetail: "getUserDetail",
       chat: "getChatByRoom",
       receiver: "getUserReceiver",
       room: "getRoom",
@@ -183,11 +190,11 @@ export default {
       value
         ? this.socket.emit("typing", {
             username: this.getUser.userName,
-            room: this.getUser.userId,
+            room: this.room,
             isTyping: true,
           })
         : this.socket.emit("typing", {
-            room: this.getUser.userId,
+            room: this.room,
             isTyping: false,
           });
     },
@@ -204,9 +211,6 @@ export default {
         alert(error);
       });
 
-    if (!this.$route.params.username) {
-      this.$router.push("/");
-    }
     this.getUser.userName = this.$route.params.username;
     // console.log(this.$route.params);
     this.socket.on("chatMessage", (data) => {
@@ -363,16 +367,16 @@ input {
 
 .msg-content .left .msg {
   background-color: #7e98df;
-  border-radius: 30px 30px 30px 5px;
-  padding: 15px;
+  border-radius: 20px 20px 20px 3px;
+  padding: 8px 15px;
   font-size: 14px;
   max-width: 40vw;
 }
 
 .msg-content .right .msg {
   background-color: #fff;
-  border-radius: 30px 30px 5px 30px;
-  padding: 15px;
+  border-radius: 20px 20px 3px 20px;
+  padding: 8px 15px;
   font-size: 14px;
   max-width: 40vw;
 }

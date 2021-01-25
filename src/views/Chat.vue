@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container>
+    <b-container fluid>
       <b-row>
         <b-col col lg="3" md="4" sm="5" cols="5" style=" width: 100%;">
           <ChatRoom

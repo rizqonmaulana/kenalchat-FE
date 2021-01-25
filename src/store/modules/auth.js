@@ -6,6 +6,7 @@ export default {
     register: {},
     user: {},
     userDetail: {},
+    userReceiver: {},
     token: localStorage.getItem("token") || null,
     VUE_APP_ROOT_URL: "http://localhost:3000",
   },
@@ -19,6 +20,9 @@ export default {
     },
     setUserDetail(state, payload) {
       state.userDetail = payload;
+    },
+    setUserReceiver(state, payload) {
+      state.userReceiver = payload;
     },
   },
   actions: {
@@ -98,6 +102,19 @@ export default {
           });
       });
     },
+    getUserReceiver(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${context.state.VUE_APP_ROOT_URL}/user/${payload}`)
+          .then((result) => {
+            context.commit("setUserReceiver", result.data.data);
+            resolve(result);
+          })
+          .catch((error) => {
+            reject(error.response);
+          });
+      });
+    },
   },
   getters: {
     isLogin(state) {
@@ -108,6 +125,9 @@ export default {
     },
     getUserDetail(state) {
       return state.userDetail[0];
+    },
+    getUserReceiver(state) {
+      return state.userReceiver[0];
     },
   },
 };
