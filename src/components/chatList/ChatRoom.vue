@@ -127,6 +127,7 @@
           v-for="(item, index) in getRoomList"
           :key="index"
           class="d-flex justify-content-between my-3 pointer"
+          @click="getChat(item.room_id, item.user_1)"
         >
           <div class="d-image">
             <img
@@ -399,6 +400,7 @@ export default {
       "getFriend",
       "getUserByEmail",
       "getRoom",
+      "getChatByRoom",
     ]),
     show() {
       console.log(this.getUser);
@@ -481,6 +483,13 @@ export default {
     formatTime(value) {
       moment.locale("ID");
       return moment(String(value)).format("LT");
+    },
+    getChat(room, id) {
+      const setData = {
+        roomId: room,
+        userId: id,
+      };
+      this.getChatByRoom(setData);
     },
   },
 };

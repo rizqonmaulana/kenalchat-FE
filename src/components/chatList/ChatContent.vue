@@ -1,292 +1,148 @@
 <template>
   <div>
-    <div v-b-modal.friendProfile class="header d-flex align-items-center py-3">
-      <div class="d-img">
-        <img
-          src="../../assets/img-profile2.png"
-          class="rounded-circle profile-img"
-        />
-      </div>
-      <div class="d-name">
-        <p class="text-black text-name">Mother</p>
-        <p class="text-blue text-status">Online</p>
-      </div>
-      <div class="d-menu">
-        <img src="../../assets/icon-profilemenu.png" />
-      </div>
+    <div v-if="room === ''" class="no-conversation text-center">
+      <p class="text-grey no-chat">Please select a chat to start messaging</p>
     </div>
-    <!-- modal friend profile -->
-    <b-modal id="friendProfile" hide-header hide-footer>
-      <div class="p-3 text-center">
-        <img src="../../assets/img-profile2.png" class="circle-rounded" />
-        <p class="text-black mt-2">Mother</p>
-        <p class="text-black mt-3">
-          Bio
-        </p>
-        <p class="text-grey mt-2">
-          hiduplah meskipun tidak berguna
-        </p>
-        <p class="text-black mt-3">
-          Email
-        </p>
-        <p class="text-grey mt-2">
-          mother@mother.com
-        </p>
-        <p class="text-black mt-3">
-          Phone number
-        </p>
-        <p class="text-grey mt-2">
-          +628989 8989 8989
-        </p>
-        <div class="map text-center mt-3">
-          <GmapMap
-            :center="coordinate"
-            :zoom="10"
-            map-type-id="terrain"
-            style="width: 100%; height: 180px"
-          >
-            <GmapMarker
-              :position="coordinate"
-              :clickable="true"
-              :draggable="true"
-              @click="clickMarker"
-              icon="https://img.icons8.com/color/48/000000/map-pin.png"
-            />
-          </GmapMap>
+    <div v-else class="conversation">
+      <div
+        v-b-modal.friendProfile
+        class="header d-flex align-items-center py-3"
+      >
+        <div class="d-img">
+          <img
+            :src="
+              receiver.user_pic === null
+                ? 'http://localhost:3000/user/icon-user.png'
+                : 'http://localhost:3000/user/' + receiver.user_pic
+            "
+            class="profile-img rounded-circle"
+          />
         </div>
-      </div>
-    </b-modal>
+        <div class="d-name">
+          <p class="text-black text-name">{{ receiver.user_name }}</p>
+          <p class="text-blue text-status">Online</p>
 
-    <div class="msg-content">
-      <!--  -->
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end">
-            <div class="img mr-2">
-              <img
-                src="../../assets/img-profile2.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-            <div class="msg">
-              <p class="text-white">hallllooooooo</p>
-            </div>
-          </div>
+          <button @click="show">show</button>
         </div>
-        <div class="right"></div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end"></div>
-        </div>
-        <div class="right">
-          <div class="d-flex flex-row align-items-end">
-            <div class="msg">
-              <p class="text-black">hallllooooooo</p>
-            </div>
-            <div class="img ml-2">
-              <img
-                src="../../assets/img-profile1.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-          </div>
+        <div class="d-menu">
+          <img src="../../assets/icon-profilemenu.png" />
         </div>
       </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end">
-            <div class="img mr-2">
-              <img
-                src="../../assets/img-profile2.png"
-                class="rounded-circle profile-img-chat"
+      <!-- modal friend profile -->
+      <b-modal id="friendProfile" hide-header hide-footer>
+        <div class="p-3 text-center">
+          <img
+            :src="
+              receiver.user_pic === null
+                ? 'http://localhost:3000/user/icon-user.png'
+                : 'http://localhost:3000/user/' + receiver.user_pic
+            "
+            class="profile-img-modal rounded-circle"
+          />
+          <p class="text-black mt-2">
+            <strong>{{ receiver.user_name }}</strong>
+          </p>
+          <p class="text-black mt-3">
+            Bio
+          </p>
+          <p class="text-grey mt-2">
+            {{ receiver.user_bio }}
+          </p>
+          <p class="text-black mt-3">
+            Email
+          </p>
+          <p class="text-grey mt-2">
+            {{ receiver.user_email }}
+          </p>
+          <p class="text-black mt-3">
+            Phone number
+          </p>
+          <p class="text-grey mt-2">
+            {{ receiver.user_phone }}
+          </p>
+          <div class="map text-center mt-3">
+            <GmapMap
+              :center="coordinate"
+              :zoom="10"
+              map-type-id="terrain"
+              style="width: 100%; height: 180px"
+            >
+              <GmapMarker
+                :position="coordinate"
+                :clickable="true"
+                :draggable="true"
+                @click="clickMarker"
+                icon="https://img.icons8.com/color/48/000000/map-pin.png"
               />
-            </div>
-            <div class="msg">
-              <p class="text-white">hallllooooooo</p>
-            </div>
+            </GmapMap>
           </div>
         </div>
-        <div class="right"></div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end"></div>
-        </div>
-        <div class="right">
-          <div class="d-flex flex-row align-items-end">
-            <div class="msg">
-              <p class="text-black">hallllooooooo</p>
-            </div>
-            <div class="img ml-2">
-              <img
-                src="../../assets/img-profile1.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end">
-            <div class="img mr-2">
-              <img
-                src="../../assets/img-profile2.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-            <div class="msg">
-              <p class="text-white">hallllooooooo</p>
-            </div>
-          </div>
-        </div>
-        <div class="right"></div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end"></div>
-        </div>
-        <div class="right">
-          <div class="d-flex flex-row align-items-end">
-            <div class="msg">
-              <p class="text-black">hallllooooooo</p>
-            </div>
-            <div class="img ml-2">
-              <img
-                src="../../assets/img-profile1.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end">
-            <div class="img mr-2">
-              <img
-                src="../../assets/img-profile2.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-            <div class="msg">
-              <p class="text-white">hallllooooooo</p>
-            </div>
-          </div>
-        </div>
-        <div class="right"></div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end"></div>
-        </div>
-        <div class="right">
-          <div class="d-flex flex-row align-items-end">
-            <div class="msg">
-              <p class="text-black">hallllooooooo</p>
-            </div>
-            <div class="img ml-2">
-              <img
-                src="../../assets/img-profile1.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end">
-            <div class="img mr-2">
-              <img
-                src="../../assets/img-profile2.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-            <div class="msg">
-              <p class="text-white">hallllooooooo</p>
-            </div>
-          </div>
-        </div>
-        <div class="right"></div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end"></div>
-        </div>
-        <div class="right">
-          <div class="d-flex flex-row align-items-end">
-            <div class="msg">
-              <p class="text-black">hallllooooooo</p>
-            </div>
-            <div class="img ml-2">
-              <img
-                src="../../assets/img-profile1.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end">
-            <div class="img mr-2">
-              <img
-                src="../../assets/img-profile2.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-            <div class="msg">
-              <p class="text-white">
-                hallllooooooo hallllooooooo hallllooooooo hallllooooooo
-                hallllooooooo vhallllooooooo hallllooooooo hallllooooooo
-                hallllooooooo hallllooooooo
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="right"></div>
-      </div>
-      <div class="d-flex justify-content-between my-2 mx-2">
-        <div class="left">
-          <div class="d-flex flex-row align-items-end"></div>
-        </div>
-        <div class="right">
-          <div class="d-flex flex-row align-items-end">
-            <div class="msg">
-              <p class="text-black">
-                hallllooooooo hallllooooooo halllloooooooha llllooooooo
-                hallllooooooo vhallllooooooo hallllooooooo hallllooooooo
-                hallllooooooo hallllooooooo
-              </p>
-            </div>
-            <div class="img ml-2">
-              <img
-                src="../../assets/img-profile1.png"
-                class="rounded-circle profile-img-chat"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      </b-modal>
 
-      <!--  -->
-    </div>
-    <div class="msg-bar py-2">
-      <div class="input-msg">
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="msg">
-            <input
-              v-model="message"
-              v-on:keyup.enter="sendMessage"
-              type="text"
-              placeholder="Type your message..."
-            />
+      <div class="msg-content">
+        <!--  -->
+        <div
+          v-for="(item, index) in chat"
+          :key="index"
+          class="d-flex justify-content-between my-2 mx-2"
+        >
+          <div v-if="getUser.userId === item.user_id_to" class="left">
+            <div class="d-flex flex-row align-items-end">
+              <div class="img mr-2">
+                <img
+                  :src="
+                    item.user_pic === null
+                      ? 'http://localhost:3000/user/icon-user.png'
+                      : 'http://localhost:3000/user/' + item.user_pic
+                  "
+                  class="profile-img-chat rounded-circle"
+                />
+              </div>
+              <div class="msg">
+                <p class="text-white">{{ item.chat_content }}</p>
+              </div>
+            </div>
           </div>
-          <div class="icon text-center">
-            <img src="../../assets/icon-plus.png" />
+          <div v-else class="right"></div>
+
+          <div v-if="getUser.userId === item.user_id_to" class="left"></div>
+          <div v-else class="right">
+            <div class="right">
+              <div class="d-flex flex-row align-items-end">
+                <div class="msg">
+                  <p class="text-black">{{ item.chat_content }}</p>
+                </div>
+                <div class="img ml-2">
+                  <img
+                    :src="
+                      item.user_pic === null
+                        ? 'http://localhost:3000/user/icon-user.png'
+                        : 'http://localhost:3000/user/' + item.user_pic
+                    "
+                    class="profile-img-chat rounded-circle"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--  -->
+      </div>
+      <div class="msg-bar py-2">
+        <div class="input-msg">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="msg">
+              <input
+                v-model="message"
+                v-on:keyup.enter="sendMessage"
+                type="text"
+                placeholder="Type your message..."
+              />
+            </div>
+            <div class="icon text-center">
+              <img src="../../assets/icon-plus.png" />
+            </div>
           </div>
         </div>
       </div>
@@ -296,7 +152,7 @@
 
 <script>
 import io from "socket.io-client";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -315,7 +171,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters({
+      getUser: "getUser",
+      chat: "getChatByRoom",
+      receiver: "getUserReceiver",
+      room: "getRoom",
+    }),
   },
   watch: {
     message(value) {
@@ -356,38 +217,43 @@ export default {
     });
   },
   methods: {
+    ...mapActions(["postChat"]),
+    show() {
+      console.log(this.receiver);
+    },
     sendMessage() {
       const setData = {
-        username: this.getUser.userName,
-        message: this.message,
-        room: this.getUser.userId,
+        userIdFrom: this.getUser.userId,
+        userIdTo: this.receiver.user_id,
+        chatContent: this.message,
       };
+      this.postChat(setData);
       // [1] menjalankan socket io untuk mendapatkan realtimenya
-      this.socket.emit("roomMessage", setData);
+      // this.socket.emit("roomMessage", setData);
       // [2] menjalankan proses axios post data ke table chat
       // this.postMessage(setData)
       this.message = "";
     },
-    selectRoom(data) {
-      if (this.oldRoom) {
-        console.log("sudah pernah masuk ke room " + this.oldRoom);
-        console.log("dan akan masuk ke room " + data);
-        this.socket.emit("changeRoom", {
-          username: this.getUser.userName,
-          room: data,
-          oldRoom: this.oldRoom,
-        });
-        this.oldRoom = data;
-      } else {
-        console.log("belum pernah masuk ke ruang manapun");
-        console.log("dan akan masuk ke room " + data);
-        this.socket.emit("joinRoom", {
-          username: this.getUser.userName,
-          room: data,
-        });
-        this.oldRoom = data;
-      }
-    },
+    // selectRoom(data) {
+    //   if (this.oldRoom) {
+    //     console.log("sudah pernah masuk ke room " + this.oldRoom);
+    //     console.log("dan akan masuk ke room " + data);
+    //     this.socket.emit("changeRoom", {
+    //       username: this.getUser.userName,
+    //       room: data,
+    //       oldRoom: this.oldRoom,
+    //     });
+    //     this.oldRoom = data;
+    //   } else {
+    //     console.log("belum pernah masuk ke ruang manapun");
+    //     console.log("dan akan masuk ke room " + data);
+    //     this.socket.emit("joinRoom", {
+    //       username: this.getUser.userName,
+    //       room: data,
+    //     });
+    //     this.oldRoom = data;
+    //   }
+    // },
     clickMarker(position) {
       this.coordinate = {
         lat: position.latLng.lat(),
@@ -399,6 +265,10 @@ export default {
 </script>
 
 <style scoped>
+.no-chat {
+  margin-top: 40%;
+}
+
 .header {
   height: 10vh;
 }
@@ -507,6 +377,10 @@ input {
   max-width: 40vw;
 }
 
+.profile-img-modal {
+  width: 100px;
+  height: 100px;
+}
 @media (max-width: 992px) {
   .d-name {
     margin-left: 40px;
