@@ -10,7 +10,11 @@
             </h5>
           </div>
           <div>
-            <img @click="showMenu" src="../../assets/icon-menu.png" />
+            <img
+              class="pointer"
+              @click="showMenu"
+              src="../../assets/icon-menu.png"
+            />
             <div
               v-if="showSetting !== 0"
               class="setting-menu position-absolute"
@@ -46,7 +50,7 @@
               </div>
               <div
                 @click="showProfileAndCloseMenu"
-                class="d-flex align-items-center my-2 menu-option"
+                class="d-flex align-items-center my-2 menu-option pointer"
               >
                 <div class="setting-icon text-right mr-2">
                   <img src="../../assets/icon-setting.png" />
@@ -73,7 +77,7 @@
           </div>
         </div>
         <div v-else class="d-flex flex-row">
-          <div @click="showProfile" style="width:5%;">
+          <div @click="showProfile" class="pointer" style="width:5%;">
             <img src="../../assets/icon-back.png" />
           </div>
           <div class="text-center" style="width:95%;">
@@ -87,7 +91,7 @@
             <img
               @click="showProfile"
               src="../../assets/img-profile1.png"
-              class="profile-img rounded-circle mt-2"
+              class="profile-img rounded-circle mt-2 pointer"
             />
           </div>
           <h5 class="text-black mt-2 text-profile-name">
@@ -122,7 +126,7 @@
         <div
           v-for="(item, index) in getRoomList"
           :key="index"
-          class="d-flex justify-content-between my-3"
+          class="d-flex justify-content-between my-3 pointer"
         >
           <div class="d-image">
             <img

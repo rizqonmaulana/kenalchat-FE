@@ -104,6 +104,10 @@ button {
   opacity: 0.5 !important;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 5px;
