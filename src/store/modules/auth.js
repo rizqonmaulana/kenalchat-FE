@@ -5,6 +5,7 @@ export default {
   state: {
     register: {},
     user: {},
+    userDetail: {},
     token: localStorage.getItem("token") || null,
     VUE_APP_ROOT_URL: "http://localhost:3000",
   },
@@ -15,6 +16,9 @@ export default {
     setUser(state, payload) {
       state.user = payload;
       state.token = payload.token;
+    },
+    setUserDetail(state, payload) {
+      state.userDetail = payload;
     },
   },
   actions: {
@@ -70,12 +74,26 @@ export default {
             payload
           )
           .then((result) => {
-            context.commit("setUser", result.data.data);
+            context.commit("setUserDetail", result.data.data);
             console.log(result);
+            console.log("ini dari patch user");
             resolve(result);
           })
           .catch((error) => {
             console.log(error);
+            reject(error.response);
+          });
+      });
+    },
+    getUserByEmail(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${context.state.VUE_APP_ROOT_URL}/user/${payload}`)
+          .then((result) => {
+            context.commit("setUserDetail", result.data.data);
+            resolve(result);
+          })
+          .catch((error) => {
             reject(error.response);
           });
       });
@@ -87,6 +105,9 @@ export default {
     },
     getUser(state) {
       return state.user;
+    },
+    getUserDetail(state) {
+      return state.userDetail[0];
     },
   },
 };

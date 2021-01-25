@@ -13,7 +13,7 @@ export default new Vuex.Store({
   actions: {},
   plugins: [
     createPersistedState({
-      path: ["Auth"],
+      paths: ["Auth.user"],
     }),
   ],
 });

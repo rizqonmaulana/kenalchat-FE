@@ -91,10 +91,10 @@
             />
           </div>
           <h5 class="text-black mt-2 text-profile-name">
-            {{ getUser.userEmail }}
+            {{ getUserDetail.user_name }}
           </h5>
           <p class="text-grey text-username">
-            @rizqonmaulana
+            {{ getUserDetail.user_email }}
           </p>
         </div>
         <div
@@ -111,7 +111,6 @@
                   placeholder="Type your message..."
               /></span>
             </div>
-            <button @click="show">show</button>
           </div>
           <div>
             <img src="../../assets/icon-plus.png" />
@@ -119,9 +118,9 @@
         </div>
       </div>
       <!-- contact list -->
-      <div v-if="profile !== 1" class="contact-list">
+      <div v-if="profile !== 1" class="contact-list" style="margin-top: -50px;">
         <div
-          v-for="(item, index) in getFriendList"
+          v-for="(item, index) in getRoomList"
           :key="index"
           class="d-flex justify-content-between my-3"
         >
@@ -137,12 +136,19 @@
           </div>
           <div class="d-name">
             <p class="text-black chat-name">{{ item.user_name }}</p>
-            <p class="text-blue chat-content">why u did it?</p>
+            <p class="text-blue chat-content">
+              {{ item.lastChat.chat_content }}
+            </p>
           </div>
           <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">15:20</p>
-            <div class="rounded-circle notif text-center ml-auto">
-              <p class="text-notif">5</p>
+            <p class="text-grey text-time">
+              {{ formatTime(item.lastChat.chat_created_at) }}
+            </p>
+            <div
+              v-if="item.unreadmessage[0].total > 0"
+              class="rounded-circle notif text-center ml-auto"
+            >
+              <p class="text-notif">{{ item.unreadmessage[0].total }}</p>
             </div>
           </div>
         </div>
@@ -201,16 +207,16 @@
         </b-modal>
       </div>
       <!-- profile -->
-      <div v-else style="margin-top: -50px;">
+      <div v-else style="margin-top: -80px;">
         <h5 class="text-black">
           Account
         </h5>
         <p class="text text-black">
-          +62898 8989 8989
+          {{ getUserDetail.user_phone }}
         </p>
         <hr />
         <p class="text text-black">
-          I'm senior software engineer from google
+          {{ getUserDetail.user_bio }}
         </p>
         <p class="text text-grey mt-1">
           Bio
@@ -332,6 +338,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { alert } from "../../mixins/alert";
+import moment from "moment";
 
 export default {
   mixins: [alert],
@@ -359,10 +366,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUser", "getFriendList"]),
+    ...mapGetters(["getUser", "getUserDetail", "getFriendList", "getRoomList"]),
   },
   created() {
     this.getContact();
+
+    this.getUserByEmail(this.getUser.userEmail);
+
+    this.getRoom(this.getUser.userId);
 
     this.$getLocation()
       .then((coordinates) => {
@@ -376,9 +387,17 @@ export default {
       });
   },
   methods: {
-    ...mapActions(["patchPassword", "patchUser", "postFriend", "getFriend"]),
+    ...mapActions([
+      "patchPassword",
+      "getUserByEmail",
+      "patchUser",
+      "postFriend",
+      "getFriend",
+      "getUserByEmail",
+      "getRoom",
+    ]),
     show() {
-      console.log(this.getFriendList);
+      console.log(this.getUser);
     },
     showMenu() {
       this.showSetting === 0 ? (this.showSetting = 1) : (this.showSetting = 0);
@@ -454,6 +473,10 @@ export default {
         .catch((error) => {
           this.errorAlert(error.data.msg);
         });
+    },
+    formatTime(value) {
+      moment.locale("ID");
+      return moment(String(value)).format("LT");
     },
   },
 };
