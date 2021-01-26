@@ -47,7 +47,9 @@
             </button>
             <p class="text-center text text-black">
               Don't have an account ?
-              <span class="text text-blue">Sign Up</span>
+              <router-link to="/register">
+                <span class="text text-blue pointer">Sign Up</span>
+              </router-link>
             </p>
           </div>
         </b-col>

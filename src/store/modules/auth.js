@@ -1,5 +1,4 @@
 import axios from "axios";
-// import router from "../../router/index";
 
 export default {
   state: {
@@ -24,6 +23,9 @@ export default {
     setUserReceiver(state, payload) {
       state.userReceiver = payload;
     },
+    delUser(state) {
+      state.user = {};
+    },
   },
   actions: {
     register(context, payload) {
@@ -38,13 +40,15 @@ export default {
           });
       });
     },
+    logout(context) {
+      localStorage.removeItem("token");
+      context.commit("delUser");
+    },
     login(context, payload) {
       return new Promise((resolve, reject) => {
         axios
           .post(`${context.state.VUE_APP_ROOT_URL}/user/login`, payload)
           .then((result) => {
-            console.log(result.data.data);
-            console.log("ini dari login");
             context.commit("setUser", result.data.data);
             localStorage.setItem("token", result.data.data.token);
             resolve(result);
@@ -70,7 +74,6 @@ export default {
       });
     },
     patchUser(context, payload) {
-      console.log(payload);
       return new Promise((resolve, reject) => {
         axios
           .patch(
@@ -79,12 +82,10 @@ export default {
           )
           .then((result) => {
             context.commit("setUserDetail", result.data.data);
-            console.log(result);
-            console.log("ini dari patch user");
+
             resolve(result);
           })
           .catch((error) => {
-            console.log(error);
             reject(error.response);
           });
       });
@@ -108,6 +109,18 @@ export default {
           .get(`${context.state.VUE_APP_ROOT_URL}/user/${payload}`)
           .then((result) => {
             context.commit("setUserReceiver", result.data.data);
+            resolve(result);
+          })
+          .catch((error) => {
+            reject(error.response);
+          });
+      });
+    },
+    activeAccount(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(`${context.state.VUE_APP_ROOT_URL}/user/active/${payload}`)
+          .then((result) => {
             resolve(result);
           })
           .catch((error) => {

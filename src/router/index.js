@@ -4,6 +4,7 @@ import Login from "../views/auth/Login.vue";
 import Register from "../views/auth/Register.vue";
 import Forgot from "../views/auth/ForgotPassword.vue";
 import Chat from "../views/Chat.vue";
+import ActiveAccount from "../views/auth/ActiveAccount.vue";
 import store from "../store/index";
 
 Vue.use(VueRouter);
@@ -32,6 +33,11 @@ const routes = [
     name: "Chat",
     component: Chat,
     meta: { requiresAuth: true },
+  },
+  {
+    path: "/active/:id",
+    name: "ActiveAccount",
+    component: ActiveAccount,
   },
 ];
 

@@ -4,6 +4,7 @@ export default {
   state: {
     messages: [],
     room: "",
+    socket: [],
     userReceiver: {},
     VUE_APP_ROOT_URL: "http://localhost:3000",
   },
@@ -12,9 +13,13 @@ export default {
       state.messages = payload;
       state.room = payload[0].room_id;
     },
+    setLiveMsg(state, payload) {
+      state.messages.push(payload);
+    },
+    setSocket(state, payload) {
+      state.socket = payload;
+    },
     setUserReceiver(state, payload) {
-      console.log(payload);
-      console.log("ini payload");
       const data = {
         user_id_to: payload[0].user_id_to,
         user_id_from: payload[0].user_id_from,
@@ -33,13 +38,11 @@ export default {
         axios
           .post(`${context.state.VUE_APP_ROOT_URL}/chat/get`, payload)
           .then((result) => {
-            console.log(result);
             context.commit("setMessages", result.data.data);
             context.commit("setUserReceiver", result.data.data);
             resolve(result);
           })
           .catch((error) => {
-            console.log(error);
             reject(error.response);
           });
       });
@@ -49,11 +52,9 @@ export default {
         axios
           .post(`${context.state.VUE_APP_ROOT_URL}/chat/post`, payload)
           .then((result) => {
-            console.log(result);
             resolve(result);
           })
           .catch((error) => {
-            console.log(error);
             reject(error.response);
           });
       });
@@ -68,6 +69,9 @@ export default {
     },
     getRoom(state) {
       return state.room;
+    },
+    getSocket(state) {
+      return state.socket;
     },
   },
 };

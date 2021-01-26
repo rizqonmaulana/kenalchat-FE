@@ -16,7 +16,6 @@ export default {
   },
   actions: {
     getFriend(context, payload) {
-      console.log(payload);
       return new Promise((resolve, reject) => {
         axios
           .post(`${context.state.VUE_APP_ROOT_URL}/friend/all`, payload)
@@ -30,8 +29,6 @@ export default {
       });
     },
     getRoom(context, payload) {
-      console.log(payload);
-      console.log("ini payload");
       return new Promise((resolve, reject) => {
         axios
           .get(`${context.state.VUE_APP_ROOT_URL}/chat/${payload}`)

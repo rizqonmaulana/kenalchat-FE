@@ -6,9 +6,10 @@
         <b-col col lg="6" sm="8" cols="12">
           <div class="login-card">
             <div class="header mb-3">
-              <span class="text-center text-header-blue mb-4">
-                <img src="../../assets/icon-back.png" />
-              </span>
+              <router-link to="/login">
+                <span class="text-center text-header-blue mb-4">
+                  <img src="../../assets/icon-back.png" /> </span
+              ></router-link>
               <span class="text-center register-text text-header-blue mb-4">
                 Register
               </span>

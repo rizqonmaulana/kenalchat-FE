@@ -73,6 +73,19 @@
                   </div>
                 </div>
               </router-link>
+              <div
+                @click="logoutAccount"
+                class="d-flex align-items-center my-2 menu-option pointer"
+              >
+                <div class="setting-icon text-right mr-2">
+                  <img src="../../assets/icon-faq.png" />
+                </div>
+                <div>
+                  <p class="text-white">
+                    Logout
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -132,7 +145,7 @@
           :key="index"
           class="d-flex justify-content-between my-3 pointer"
           @click="
-            getChat(item.room_id, item.user_1);
+            selectRoom(item);
             getUserReceiver(item.user_email);
           "
         >
@@ -281,7 +294,13 @@
         </div>
 
         <!-- change profile -->
-        <b-modal id="profile" hide-header hide-footer>
+        <b-modal
+          id="profile"
+          @show="getExistData"
+          @hidden="getNewData"
+          hide-header
+          hide-footer
+        >
           <div class="p-3">
             <label>Username</label>
             <br />
@@ -348,7 +367,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import io from "socket.io-client";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import { alert } from "../../mixins/alert";
 import moment from "moment";
 
@@ -375,12 +395,22 @@ export default {
         userBio: "",
         userPic: "",
       },
+      socket: io("http://localhost:3000"),
+      room: "",
+      oldRoom: "",
+      typing: {
+        isTyping: false,
+      },
     };
   },
   computed: {
     ...mapGetters(["getUser", "getUserDetail", "getFriendList", "getRoomList"]),
   },
   created() {
+    this.socket.on("chatMessage", (data) => {
+      this.setLiveMsg(data);
+      console.log("pesan baru");
+    });
     this.getContact();
 
     this.getUserByEmail(this.getUser.userEmail);
@@ -424,7 +454,9 @@ export default {
       "getRoom",
       "getChatByRoom",
       "getUserReceiver",
+      "logout",
     ]),
+    ...mapMutations(["setLiveMsg", "setSocket"]),
     show() {
       console.log(this.getUser);
     },
@@ -481,7 +513,6 @@ export default {
       this.getFriend(data);
     },
     handleFile(event) {
-      console.log(event);
       this.formUser.userPic = event.target.files[0];
     },
     updateUser() {
@@ -513,6 +544,44 @@ export default {
         userId: id,
       };
       this.getChatByRoom(setData);
+    },
+    selectRoom(data) {
+      console.log(data);
+      if (this.oldRoom) {
+        console.log("sudah pernah masuk ke room " + this.oldRoom);
+        console.log("dan akan masuk ke room " + data);
+        this.socket.emit("changeRoom", {
+          room: data.room_id,
+          oldRoom: this.oldRoom,
+        });
+        this.oldRoom = data.room_id;
+      } else {
+        console.log("belum pernah masuk ke ruang manapun");
+        console.log("dan akan masuk ke room " + data);
+        this.socket.emit("joinRoom", {
+          room: data.room_id,
+        });
+        this.oldRoom = data.room_id;
+      }
+      const sendToSocket = {
+        user_1: data.user_1,
+        user_2: data.user_2,
+        room_id: data.room_id,
+        user_pic: this.getUserDetail.user_pic,
+      };
+      this.setSocket(sendToSocket);
+      this.getChat(data.room_id, data.user_1);
+    },
+    getNewData() {
+      this.getUserByEmail(this.getUser.userEmail);
+    },
+    getExistData() {
+      this.formUser.userName = this.getUserDetail.user_name;
+      this.formUser.userPhone = this.getUserDetail.user_phone;
+      this.formUser.userBio = this.getUserDetail.user_bio;
+    },
+    logoutAccount() {
+      this.logout();
     },
   },
 };

@@ -21,8 +21,6 @@
         <div class="d-name">
           <p class="text-black text-name">{{ receiver.user_name }}</p>
           <p class="text-blue text-status">Online</p>
-          {{ userReceiver }}
-          <button @click="show">show</button>
         </div>
         <div class="d-menu">
           <img src="../../assets/icon-profilemenu.png" />
@@ -81,11 +79,13 @@
                 icon="https://img.icons8.com/color/48/000000/map-pin.png"
               />
             </GmapMap>
+            {{ receiver.user_lat }}
+            {{ receiver.user_lng }}
           </div>
         </div>
       </b-modal>
 
-      <div class="msg-content">
+      <div class="msg-content" id="msg-content">
         <!--  -->
         <div
           v-for="(item, index) in chat"
@@ -99,7 +99,7 @@
                   :src="
                     item.user_pic === null
                       ? 'http://localhost:3000/user/icon-user.png'
-                      : 'http://localhost:3000/user/' + item.user_pic
+                      : 'http://localhost:3000/user/' + receiver.user_pic
                   "
                   class="profile-img-chat rounded-circle"
                 />
@@ -163,13 +163,10 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      socket: io("http://localhost:3000"),
       message: "",
       messages: [],
       oldRoom: "",
-      typing: {
-        isTyping: false,
-      },
+      socket: io("http://localhost:3000"),
       coordinate: {
         lat: 10,
         lng: 10,
@@ -183,6 +180,7 @@ export default {
       chat: "getChatByRoom",
       receiver: "getUserReceiver",
       room: "getRoom",
+      getSocket: "getSocket",
     }),
   },
   watch: {
@@ -211,31 +209,31 @@ export default {
         alert(error);
       });
 
-    this.getUser.userName = this.$route.params.username;
-    // console.log(this.$route.params);
-    this.socket.on("chatMessage", (data) => {
-      this.messages.push(data);
-    });
     this.socket.on("typingMessage", (data) => {
       this.typing = data;
     });
   },
   methods: {
     ...mapActions(["postChat"]),
-    show() {
-      console.log(this.receiver);
-    },
     sendMessage() {
       const setData = {
         userIdFrom: this.getUser.userId,
         userIdTo: this.receiver.user_id,
         chatContent: this.message,
       };
-      this.postChat(setData);
+
+      const data = {
+        user_id_from: this.getSocket.user_1,
+        user_id_to: this.getSocket.user_2,
+        user_pic: this.getSocket.user_pic,
+        chat_content: this.message,
+        room_id: this.getSocket.room_id,
+      };
       // [1] menjalankan socket io untuk mendapatkan realtimenya
-      // this.socket.emit("roomMessage", setData);
+      this.socket.emit("roomMessage", data);
+      this.postChat(setData);
       // [2] menjalankan proses axios post data ke table chat
-      // this.postMessage(setData)
+      // this.postMessage(setData);
       this.message = "";
     },
     // selectRoom(data) {
@@ -264,6 +262,14 @@ export default {
         lng: position.latLng.lng(),
       };
     },
+    scroll() {
+      document.getElementById(
+        "msg-content"
+      ).scrollTop = document.getElementById("msg-content").scrollHeight;
+    },
+  },
+  updated() {
+    this.scroll();
   },
 };
 </script>
