@@ -2,12 +2,12 @@
   <p align="center">
     <a href="link_deploy">View Demo</a>
     ·
-    <a href="https://github.com/rizqonmaulana/kenalchat-FE">Report Bug</a>
+    <a href="https://github.com/rizqonmaulana/kenalchat-FE/issues">Report Bug</a>
     ·
-    <a href="https://github.com/rizqonmaulana/kenalchat-FE">Request Feature</a>
+    <a href="https://github.com/rizqonmaulana/kenalchat-FE/issues">Request Feature</a>
   </p>
 
-<!-- ![Image Banner](https://i.ibb.co/gWmZGx5/Screenshot-from-2021-01-12-09-06-23.png) -->
+![Image Banner](https://i.ibb.co/BwNGMmW/smartmockups-klfru96j.jpg)
 
 ## About The Project
 
@@ -26,13 +26,15 @@ Kenal is a realtime web app chat
 
 ## Getting Started
 
-1. Download this Project or you can type `git clone #link_git`
+1. Download this Project or you can type `git clone https://github.com/rizqonmaulana/kenalchat-FE.git`
 2. Open app's directory in CMD or Terminal
 3. Type `npm install` or `yarn install`
 4. Add .env file at root folder project
 
 ```sh
-VUE_APP_ENDPOINT = [Backend API]
+VUE_APP_ROOT_URL=https://backend-rizqon.fwebdev.online/apikenal
+VUE_APP_ROOT_URL_SOCKET=https://backend-rizqon.fwebdev.online
+VUE_APP_ROOT_URL_IMAGE=https://backend-rizqon.fwebdev.online/apikenal/fileupload/
 ```
 
 5. Type `npm run serve`
