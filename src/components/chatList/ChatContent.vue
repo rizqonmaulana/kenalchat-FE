@@ -215,6 +215,9 @@ export default {
   methods: {
     ...mapActions(["postChat", "getRoom"]),
     sendMessage() {
+      if (!this.message) {
+        return;
+      }
       this.getRoom(this.getUser.userId);
       const setData = {
         userIdFrom: this.getUser.userId,

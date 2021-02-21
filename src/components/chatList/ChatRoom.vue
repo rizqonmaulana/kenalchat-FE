@@ -147,6 +147,7 @@
           @click="
             selectRoom(item);
             getUserReceiver(item.user_email);
+            reGetRoom();
           "
         >
           <div class="d-image">
@@ -422,6 +423,11 @@ export default {
   computed: {
     ...mapGetters(["getUser", "getUserDetail", "getFriendList", "getRoomList"]),
   },
+  watch: {
+    // getRoomList() {
+    //   this.getRoom(this.getUser.userId);
+    // },
+  },
   created() {
     this.socket.on("chatMessage", (data) => {
       this.setLiveMsg(data);
@@ -637,6 +643,9 @@ export default {
       this.formUser.userName = this.getUserDetail.user_name;
       this.formUser.userPhone = this.getUserDetail.user_phone;
       this.formUser.userBio = this.getUserDetail.user_bio;
+    },
+    reGetRoom() {
+      this.getRoom(this.getUser.userId);
     },
     logoutAccount() {
       this.logout();
