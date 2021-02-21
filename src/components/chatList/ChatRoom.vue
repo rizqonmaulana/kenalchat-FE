@@ -427,7 +427,19 @@ export default {
   },
   created() {
     this.socket.on("chatMessage", (data) => {
-      this.setLiveMsg(data);
+      console.log(data);
+      if (data.chat_content) {
+        this.setLiveMsg(data);
+      } else if (data.notif) {
+        this.$toasted.success("New message from " + data.username, {
+          duration: 1000,
+        });
+      }
+    });
+
+    this.socket.emit("joinRoom", {
+      username: this.getUser.userName,
+      room: this.getUser.userId,
     });
 
     this.getContact();

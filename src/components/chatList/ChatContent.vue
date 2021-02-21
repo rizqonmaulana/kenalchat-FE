@@ -241,13 +241,17 @@ export default {
         chat_content: this.message,
         room_id: this.getSocket.room_id,
       };
-      console.log("ini data ke socket.io");
-      console.log(data);
-      // [1] menjalankan socket io untuk mendapatkan realtimenya
+
+      const sendNotif = {
+        username: this.getUser.userName,
+        room_id: this.receiver.user_id,
+        notif: true,
+      };
+
+      this.socket.emit("roomMessage", sendNotif);
+
       this.socket.emit("roomMessage", data);
       this.postChat(setData);
-      // [2] menjalankan proses axios post data ke table chat
-      // this.postMessage(setData);
       this.message = "";
     },
     clickMarker(position) {

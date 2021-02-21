@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue";
 import * as VueGoogleMaps from "vue2-google-maps";
 import VueGeolocation from "vue-browser-geolocation";
+import toasted from "vue-toasted";
 
 Vue.use(VueGeolocation);
 
@@ -21,6 +22,17 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+
+Vue.use(toasted, {
+  duration: 10000,
+  position: "top-right",
+  action: {
+    text: "Close",
+    onClick: (e, toastObject) => {
+      toastObject.goAway(0);
+    },
+  },
+});
 
 new Vue({
   router,
