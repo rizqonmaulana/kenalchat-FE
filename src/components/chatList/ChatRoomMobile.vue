@@ -204,6 +204,7 @@
                         @click="
                           startChat(item.user_friend_id);
                           getUserReceiver(item.user_email);
+                          setShowChatMobile();
                         "
                       >
                         Chat

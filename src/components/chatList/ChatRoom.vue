@@ -267,7 +267,7 @@
 
         <div
           v-b-modal.profile
-          class="d-flex  hide-outline flex-row align-items-center my-2 "
+          class="d-flex  hide-outline flex-row align-items-center my-3 "
         >
           <div class="setting-icon text-center">
             <img src="../../assets/icon-profile.png" />
@@ -281,7 +281,7 @@
         </div>
         <div
           v-b-modal.my-modal
-          class="d-flex hide-outline flex-row align-items-center"
+          class="d-flex hide-outline flex-row align-items-center mb-3"
         >
           <div class="setting-icon text-center">
             <img src="../../assets/icon-lock.png" />
