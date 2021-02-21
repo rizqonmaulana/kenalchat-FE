@@ -138,5 +138,8 @@ export default {
     getUserReceiver(state) {
       return state.userReceiver[0];
     },
+    getEmailReceiver(state) {
+      return state.emailReceiver;
+    },
   },
 };

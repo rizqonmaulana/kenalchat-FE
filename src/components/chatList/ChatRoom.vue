@@ -138,7 +138,7 @@
           </div>
         </div>
       </div>
-      <!-- contact list -->
+      <!-- room list -->
       <div v-if="profile !== 1" class="contact-list" style="margin-top: -50px;">
         <div
           v-for="(item, index) in getRoomList"
@@ -415,9 +415,6 @@ export default {
       socket: io("http://localhost:3000"),
       room: "",
       oldRoom: "",
-      typing: {
-        isTyping: false,
-      },
     };
   },
   computed: {
@@ -431,13 +428,16 @@ export default {
   created() {
     this.socket.on("chatMessage", (data) => {
       this.setLiveMsg(data);
-      console.log("pesan baru");
     });
     this.getContact();
 
     this.getUserByEmail(this.getUser.userEmail);
 
     this.getRoom(this.getUser.userId);
+
+    this.socket.on("typingMessage", (data) => {
+      this.pushTyping(data);
+    });
 
     this.$getLocation()
       .then((coordinates) => {
@@ -480,7 +480,7 @@ export default {
       "deleteFriend",
       "createRoom",
     ]),
-    ...mapMutations(["setLiveMsg", "setSocket"]),
+    ...mapMutations(["setLiveMsg", "setSocket", "pushTyping"]),
     show() {
       console.log(this.getUser);
     },
@@ -599,7 +599,6 @@ export default {
 
       this.createRoom(data)
         .then((result) => {
-          console.log(result);
           this.getRoom(this.getUser.userId);
           this.selectRoom(result.data.data);
         })
@@ -608,20 +607,17 @@ export default {
         });
     },
     selectRoom(data) {
-      console.log("MASUK SELECT ROOM");
-      console.log(data);
-      console.log("^^^ INI DATAA");
       if (this.oldRoom) {
-        console.log("sudah pernah masuk ke room " + this.oldRoom);
-        console.log("dan akan masuk ke room " + data.room_id);
+        // console.log("sudah pernah masuk ke room " + this.oldRoom);
+        // console.log("dan akan masuk ke room " + data.room_id);
         this.socket.emit("changeRoom", {
           room: data.room_id,
           oldRoom: this.oldRoom,
         });
         this.oldRoom = data.room_id;
       } else {
-        console.log("belum pernah masuk ke ruang manapun");
-        console.log("dan akan masuk ke room " + data);
+        // console.log("belum pernah masuk ke ruang manapun");
+        // console.log("dan akan masuk ke room " + data);
         this.socket.emit("joinRoom", {
           room: data.room_id,
         });

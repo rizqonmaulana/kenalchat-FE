@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="room === ''" class="no-conversation text-center">
+    <!-- <div v-if="room === ''" class="no-conversation text-center">
       <p class="text-grey no-chat">Please select a chat to start messaging</p>
-    </div>
-    <div v-else class="conversation">
+    </div> -->
+    <div class="conversation">
       <div
         v-b-modal.friendProfile
         class="header d-flex align-items-center py-3"
@@ -132,6 +132,12 @@
             </div>
           </div>
         </div>
+        <p
+          v-if="typing.isTyping && typing.username !== getUser.userName"
+          class="typing-text ml-2"
+        >
+          <em>{{ typing.username }} is typing a message ...</em>
+        </p>
 
         <!--  -->
       </div>
@@ -180,6 +186,8 @@ export default {
       chat: "getChatByRoom",
       receiver: "getUserReceiver",
       getSocket: "getSocket",
+      room: "getRoom",
+      typing: "getTyping",
     }),
   },
   watch: {
@@ -244,26 +252,6 @@ export default {
       // this.postMessage(setData);
       this.message = "";
     },
-    // selectRoom(data) {
-    //   if (this.oldRoom) {
-    //     console.log("sudah pernah masuk ke room " + this.oldRoom);
-    //     console.log("dan akan masuk ke room " + data);
-    //     this.socket.emit("changeRoom", {
-    //       username: this.getUser.userName,
-    //       room: data,
-    //       oldRoom: this.oldRoom,
-    //     });
-    //     this.oldRoom = data;
-    //   } else {
-    //     console.log("belum pernah masuk ke ruang manapun");
-    //     console.log("dan akan masuk ke room " + data);
-    //     this.socket.emit("joinRoom", {
-    //       username: this.getUser.userName,
-    //       room: data,
-    //     });
-    //     this.oldRoom = data;
-    //   }
-    // },
     clickMarker(position) {
       this.coordinate = {
         lat: position.latLng.lat(),
@@ -399,6 +387,12 @@ input {
   width: 100px;
   height: 100px;
 }
+
+.typing-text {
+  font-size: 14px;
+  color: rgb(169, 169, 169);
+}
+
 @media (max-width: 992px) {
   .d-name {
     margin-left: 40px;
