@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "../../router/index";
 
 export default {
   state: {
@@ -23,7 +24,9 @@ export default {
       state.userReceiver = payload;
     },
     delUser(state) {
-      state.user = {};
+      state.user = "";
+      state.userDetail = "";
+      state.token = null;
     },
   },
   actions: {
@@ -42,6 +45,7 @@ export default {
     logout(context) {
       localStorage.removeItem("token");
       context.commit("delUser");
+      router.push("/login");
     },
     login(context, payload) {
       return new Promise((resolve, reject) => {
@@ -113,6 +117,7 @@ export default {
       });
     },
     activeAccount(context, payload) {
+      console.log(payload);
       return new Promise((resolve, reject) => {
         axios
           .patch(`${process.env.VUE_APP_ROOT_URL}/user/active/${payload}`)
@@ -120,6 +125,7 @@ export default {
             resolve(result);
           })
           .catch((error) => {
+            console.log(error);
             reject(error.response);
           });
       });

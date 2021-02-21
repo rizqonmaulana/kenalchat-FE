@@ -12,8 +12,8 @@
           <img
             :src="
               receiver.user_pic === null
-                ? 'http://localhost:3000/user/icon-user.png'
-                : 'http://localhost:3000/user/' + receiver.user_pic
+                ? url + 'user/icon-user.png'
+                : url + 'user/' + receiver.user_pic
             "
             class="profile-img rounded-circle"
           />
@@ -32,8 +32,8 @@
           <img
             :src="
               receiver.user_pic === null
-                ? 'http://localhost:3000/user/icon-user.png'
-                : 'http://localhost:3000/user/' + receiver.user_pic
+                ? url + 'user/icon-user.png'
+                : url + 'user/' + receiver.user_pic
             "
             class="profile-img-modal rounded-circle"
           />
@@ -98,8 +98,8 @@
                 <img
                   :src="
                     item.user_pic === null
-                      ? 'http://localhost:3000/user/icon-user.png'
-                      : 'http://localhost:3000/user/' + receiver.user_pic
+                      ? url + 'user/icon-user.png'
+                      : url + 'user/' + receiver.user_pic
                   "
                   class="profile-img-chat rounded-circle"
                 />
@@ -122,8 +122,8 @@
                   <img
                     :src="
                       item.user_pic === null
-                        ? 'http://localhost:3000/user/icon-user.png'
-                        : 'http://localhost:3000/user/' + item.user_pic
+                        ? url + 'user/icon-user.png'
+                        : url + 'user/' + item.user_pic
                     "
                     class="profile-img-chat rounded-circle"
                   />
@@ -172,11 +172,14 @@ export default {
       message: "",
       messages: [],
       oldRoom: "",
-      socket: io("http://localhost:3000"),
+      socket: io(process.env.VUE_APP_ROOT_URL_SOCKET, {
+        path: "/apikenal/socket.io",
+      }),
       coordinate: {
         lat: 10,
         lng: 10,
       },
+      url: process.env.VUE_APP_ROOT_URL_IMAGE,
     };
   },
   computed: {

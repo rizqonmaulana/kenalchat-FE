@@ -74,7 +74,7 @@
                 </div>
               </router-link>
               <div
-                @click="logoutAccount"
+                @click="logout"
                 class="d-flex align-items-center my-2 menu-option pointer"
               >
                 <div class="setting-icon text-right mr-2">
@@ -105,8 +105,8 @@
               @click="showProfile"
               :src="
                 getUserDetail.user_pic === null
-                  ? 'http://localhost:3000/user/icon-user.png'
-                  : 'http://localhost:3000/user/' + getUserDetail.user_pic
+                  ? url + 'user/icon-user.png'
+                  : url + 'user/' + getUserDetail.user_pic
               "
               class="profile-img rounded-circle mt-2 pointer"
             />
@@ -154,8 +154,8 @@
             <img
               :src="
                 item.user_pic === null
-                  ? 'http://localhost:3000/user/icon-user.png'
-                  : 'http://localhost:3000/user/' + item.user_pic
+                  ? url + 'user/icon-user.png'
+                  : url + 'user/' + item.user_pic
               "
               class="profile-img rounded-circle"
             />
@@ -226,8 +226,8 @@
                     <img
                       :src="
                         item.user_pic === null
-                          ? 'http://localhost:3000/user/icon-user.png'
-                          : 'http://localhost:3000/user/' + item.user_pic
+                          ? url + 'user/icon-user.png'
+                          : url + 'user/' + item.user_pic
                       "
                       class="profile-img rounded-circle"
                     />
@@ -412,9 +412,12 @@ export default {
         userBio: "",
         userPic: "",
       },
-      socket: io("http://localhost:3000"),
+      socket: io(process.env.VUE_APP_ROOT_URL_SOCKET, {
+        path: "/apikenal/socket.io",
+      }),
       room: "",
       oldRoom: "",
+      url: process.env.VUE_APP_ROOT_URL_IMAGE,
     };
   },
   computed: {
@@ -655,9 +658,6 @@ export default {
     },
     reGetRoom() {
       this.getRoom(this.getUser.userId);
-    },
-    logoutAccount() {
-      this.logout();
     },
   },
 };

@@ -35,7 +35,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/active/:id",
+    path: "/active/:key",
     name: "ActiveAccount",
     component: ActiveAccount,
   },
