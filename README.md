@@ -1,4 +1,4 @@
-<h1 align='center'>Vue JS - Kenal</h1>
+<h1 align='center'>Vue JS - Kenal (web-based realtime chat application)</h1>
   <p align="center">
     <a href="https://kenal.netlify.app">View Demo</a>
     ·
