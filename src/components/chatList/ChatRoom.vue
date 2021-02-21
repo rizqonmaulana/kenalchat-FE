@@ -161,12 +161,13 @@
           </div>
           <div class="d-name">
             <p class="text-black chat-name">{{ item.user_name }}</p>
-            <p class="text-blue chat-content">
-              {{ item.lastChat.chat_content }}
+            <p v-if="item.lastChat" class="text-blue chat-content">
+              {{ item.lastChat.chat_content.slice(0, 30) }}
+              {{ item.lastChat.chat_content.length >= 30 ? "..." : "" }}
             </p>
           </div>
           <div class="d-time text-right mr-2">
-            <p class="text-grey text-time">
+            <p v-if="item.lastChat" class="text-grey text-time">
               {{ formatTime(item.lastChat.chat_created_at) }}
             </p>
             <div
@@ -214,6 +215,13 @@
                   cols="12"
                 >
                   <div class="card-contact text-center mt-3">
+                    <div class="position-absolute">
+                      <img
+                        @click="delFriend(item.user_friend_id)"
+                        src="../../assets/icon-delete.png"
+                        class="del-icon"
+                      />
+                    </div>
                     <img
                       :src="
                         item.user_pic === null
@@ -223,7 +231,15 @@
                       class="profile-img rounded-circle"
                     />
                     <p class="text-black my-2">{{ item.user_name }}</p>
-                    <button class="button btn-blue">Chat</button>
+                    <button
+                      class="button btn-blue"
+                      @click="
+                        startChat(item.user_friend_id);
+                        getUserReceiver(item.user_email);
+                      "
+                    >
+                      Chat
+                    </button>
                   </div>
                 </b-col>
               </b-row>
@@ -455,6 +471,8 @@ export default {
       "getChatByRoom",
       "getUserReceiver",
       "logout",
+      "deleteFriend",
+      "createRoom",
     ]),
     ...mapMutations(["setLiveMsg", "setSocket"]),
     show() {
@@ -505,6 +523,22 @@ export default {
           this.errorAlert(error.data.msg);
         });
     },
+    delFriend(friendId) {
+      if (confirm("Are you sure want to remove this friend ?")) {
+        const data = {
+          userId: this.getUser.userId,
+          friendId: friendId,
+        };
+        this.deleteFriend(data)
+          .then((result) => {
+            this.getContact();
+            this.successAlert(result.data.msg);
+          })
+          .catch((error) => {
+            this.errorAlert(error.data.msg);
+          });
+      }
+    },
     getContact() {
       const id = this.getUser.userId;
       const data = {
@@ -543,13 +577,37 @@ export default {
         roomId: room,
         userId: id,
       };
-      this.getChatByRoom(setData);
+      this.getChatByRoom(setData).then((result) => {
+        if (result.length > 0) {
+          return result;
+        } else {
+          return [];
+        }
+      });
+    },
+    startChat(friendId) {
+      const data = {
+        userIdFrom: this.getUser.userId,
+        userIdTo: friendId,
+      };
+
+      this.createRoom(data)
+        .then((result) => {
+          console.log(result);
+          this.getRoom(this.getUser.userId);
+          this.selectRoom(result.data.data);
+        })
+        .catch((error) => {
+          this.errorAlert(error.data.msg);
+        });
     },
     selectRoom(data) {
+      console.log("MASUK SELECT ROOM");
       console.log(data);
+      console.log("^^^ INI DATAA");
       if (this.oldRoom) {
         console.log("sudah pernah masuk ke room " + this.oldRoom);
-        console.log("dan akan masuk ke room " + data);
+        console.log("dan akan masuk ke room " + data.room_id);
         this.socket.emit("changeRoom", {
           room: data.room_id,
           oldRoom: this.oldRoom,
@@ -593,7 +651,7 @@ p {
 }
 
 .head {
-  height: 37vh;
+  min-height: 280px;
 }
 .contact-list {
   height: 58vh;
@@ -760,6 +818,14 @@ input {
 
 .hide-outline:focus {
   outline: none !important;
+}
+
+.del-icon {
+  height: 20px;
+  width: 20px;
+  margin-left: -15px;
+  margin-top: -15px;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

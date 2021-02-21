@@ -7,7 +7,6 @@ export default {
     userDetail: {},
     userReceiver: {},
     token: localStorage.getItem("token") || null,
-    VUE_APP_ROOT_URL: "http://localhost:3000",
   },
   mutations: {
     setRegister(state, payload) {
@@ -31,7 +30,7 @@ export default {
     register(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${context.state.VUE_APP_ROOT_URL}/user/register`, payload)
+          .post(`${process.env.VUE_APP_ROOT_URL}/user/register`, payload)
           .then((result) => {
             resolve(result);
           })
@@ -47,7 +46,7 @@ export default {
     login(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${context.state.VUE_APP_ROOT_URL}/user/login`, payload)
+          .post(`${process.env.VUE_APP_ROOT_URL}/user/login`, payload)
           .then((result) => {
             context.commit("setUser", result.data.data);
             localStorage.setItem("token", result.data.data.token);
@@ -62,7 +61,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios
           .patch(
-            `${context.state.VUE_APP_ROOT_URL}/user/change/password`,
+            `${process.env.VUE_APP_ROOT_URL}/user/change/password`,
             payload
           )
           .then((result) => {
@@ -76,10 +75,7 @@ export default {
     patchUser(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .patch(
-            `${context.state.VUE_APP_ROOT_URL}/user/change/profile`,
-            payload
-          )
+          .patch(`${process.env.VUE_APP_ROOT_URL}/user/change/profile`, payload)
           .then((result) => {
             context.commit("setUserDetail", result.data.data);
 
@@ -93,7 +89,7 @@ export default {
     getUserByEmail(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${context.state.VUE_APP_ROOT_URL}/user/${payload}`)
+          .get(`${process.env.VUE_APP_ROOT_URL}/user/${payload}`)
           .then((result) => {
             context.commit("setUserDetail", result.data.data);
             resolve(result);
@@ -106,7 +102,7 @@ export default {
     getUserReceiver(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${context.state.VUE_APP_ROOT_URL}/user/${payload}`)
+          .get(`${process.env.VUE_APP_ROOT_URL}/user/${payload}`)
           .then((result) => {
             context.commit("setUserReceiver", result.data.data);
             resolve(result);
@@ -119,7 +115,7 @@ export default {
     activeAccount(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .patch(`${context.state.VUE_APP_ROOT_URL}/user/active/${payload}`)
+          .patch(`${process.env.VUE_APP_ROOT_URL}/user/active/${payload}`)
           .then((result) => {
             resolve(result);
           })

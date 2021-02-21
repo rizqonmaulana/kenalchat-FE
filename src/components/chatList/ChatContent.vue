@@ -179,7 +179,6 @@ export default {
       userDetail: "getUserDetail",
       chat: "getChatByRoom",
       receiver: "getUserReceiver",
-      room: "getRoom",
       getSocket: "getSocket",
     }),
   },
@@ -214,13 +213,17 @@ export default {
     });
   },
   methods: {
-    ...mapActions(["postChat"]),
+    ...mapActions(["postChat", "getRoom"]),
     sendMessage() {
+      this.getRoom(this.getUser.userId);
       const setData = {
         userIdFrom: this.getUser.userId,
         userIdTo: this.receiver.user_id,
         chatContent: this.message,
+        roomId: this.getSocket.room_id,
       };
+      console.log("ini data ke db");
+      console.log(setData);
 
       const data = {
         user_id_from: this.getSocket.user_1,
@@ -229,6 +232,8 @@ export default {
         chat_content: this.message,
         room_id: this.getSocket.room_id,
       };
+      console.log("ini data ke socket.io");
+      console.log(data);
       // [1] menjalankan socket io untuk mendapatkan realtimenya
       this.socket.emit("roomMessage", data);
       this.postChat(setData);

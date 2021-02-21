@@ -6,7 +6,6 @@ export default {
     room: "",
     socket: [],
     userReceiver: {},
-    VUE_APP_ROOT_URL: "http://localhost:3000",
   },
   mutations: {
     setMessages(state, payload) {
@@ -36,7 +35,7 @@ export default {
     getChatByRoom(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${context.state.VUE_APP_ROOT_URL}/chat/get`, payload)
+          .post(`${process.env.VUE_APP_ROOT_URL}/chat/get`, payload)
           .then((result) => {
             context.commit("setMessages", result.data.data);
             context.commit("setUserReceiver", result.data.data);
@@ -50,7 +49,19 @@ export default {
     postChat(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${context.state.VUE_APP_ROOT_URL}/chat/post`, payload)
+          .post(`${process.env.VUE_APP_ROOT_URL}/chat/post`, payload)
+          .then((result) => {
+            resolve(result);
+          })
+          .catch((error) => {
+            reject(error.response);
+          });
+      });
+    },
+    createRoom(_context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_ROOT_URL}/chat/create/room`, payload)
           .then((result) => {
             resolve(result);
           })
