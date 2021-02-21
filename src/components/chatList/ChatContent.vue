@@ -233,8 +233,6 @@ export default {
         chatContent: this.message,
         roomId: this.getSocket.room_id,
       };
-      console.log("ini data ke db");
-      console.log(setData);
 
       const data = {
         user_id_from: this.getSocket.user_1,

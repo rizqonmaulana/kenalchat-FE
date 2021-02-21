@@ -429,6 +429,7 @@ export default {
     this.socket.on("chatMessage", (data) => {
       this.setLiveMsg(data);
     });
+
     this.getContact();
 
     this.getUserByEmail(this.getUser.userEmail);

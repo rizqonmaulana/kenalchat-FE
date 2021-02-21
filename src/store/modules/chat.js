@@ -27,7 +27,6 @@ export default {
     },
     pushTyping(state, payload) {
       state.typing = payload;
-      console.log(state.typing);
     },
   },
   actions: {
