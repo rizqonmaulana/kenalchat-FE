@@ -6,6 +6,7 @@ export default {
     room: "",
     socket: [],
     userReceiver: {},
+    showChatMobile: 0,
   },
   mutations: {
     setMessages(state, payload) {
@@ -29,6 +30,12 @@ export default {
         user_bio: payload[0].user_bio,
       };
       state.userReceiver = data;
+    },
+    setShowChatMobile(state) {
+      state.showChatMobile === 0
+        ? (state.showChatMobile = 1)
+        : (state.showChatMobile = 0);
+      console.log("ini show chat mobile " + state.showChatMobile);
     },
   },
   actions: {
@@ -83,6 +90,9 @@ export default {
     },
     getSocket(state) {
       return state.socket;
+    },
+    getShowChatMobile(state) {
+      return state.showChatMobile;
     },
   },
 };
