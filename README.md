@@ -11,7 +11,7 @@
 
 ## About The Project
 
-Kenal is a realtime web app chat
+Kenal is a web-based realtime chat application, with Kenal we can make friends with other people and chat with them. kenal built with Express JS, Vue JS and MySQL.
 
 ## Built With
 
