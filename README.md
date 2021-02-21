@@ -1,6 +1,6 @@
 <h1 align='center'>Vue JS - Kenal</h1>
   <p align="center">
-    <a href="link_deploy">View Demo</a>
+    <a href="https://kenal.netlify.app">View Demo</a>
     ·
     <a href="https://github.com/rizqonmaulana/kenalchat-FE/issues">Report Bug</a>
     ·
