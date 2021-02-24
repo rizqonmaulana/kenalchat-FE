@@ -437,6 +437,8 @@ export default {
         this.$toasted.success("New message from " + data.username, {
           duration: 1000,
         });
+
+        this.getRoom(this.getUser.userId);
       }
     });
 
