@@ -13,6 +13,9 @@ export default {
       state.messages = payload;
       state.room = payload[0].room_id;
     },
+    setRoom(state, payload) {
+      state.room = payload;
+    },
     setLiveMsg(state, payload) {
       state.messages.push(payload);
     },

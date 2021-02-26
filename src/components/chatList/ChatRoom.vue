@@ -74,7 +74,7 @@
                 </div>
               </router-link>
               <div
-                @click="logout"
+                @click="handleLogout"
                 class="d-flex align-items-center my-2 menu-option pointer"
               >
                 <div class="setting-icon text-right mr-2">
@@ -421,13 +421,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUser", "getUserDetail", "getFriendList", "getRoomList"]),
+    ...mapGetters([
+      "getUser",
+      "getUserDetail",
+      "getFriendList",
+      "getRoomList",
+      "getRoom",
+    ]),
   },
-  watch: {
-    // getRoomList() {
-    //   this.getRoom(this.getUser.userId);
-    // },
-  },
+  // watch: {
+  // getRoomList() {
+  //   this.getRoom(this.getUser.userId);
+  // },
+  // },
   created() {
     this.socket.on("chatMessage", (data) => {
       console.log(data);
@@ -437,7 +443,6 @@ export default {
         this.$toasted.success("New message from " + data.username, {
           duration: 1000,
         });
-
         this.getRoom(this.getUser.userId);
       }
     });
@@ -498,7 +503,7 @@ export default {
       "deleteFriend",
       "createRoom",
     ]),
-    ...mapMutations(["setLiveMsg", "setSocket", "pushTyping"]),
+    ...mapMutations(["setLiveMsg", "setSocket", "pushTyping", "setRoom"]),
     show() {
       console.log(this.getUser);
     },
@@ -647,6 +652,7 @@ export default {
         room_id: data.room_id,
         user_pic: this.getUserDetail.user_pic,
       };
+      this.setRoom(data.room_id);
       this.setSocket(sendToSocket);
       this.getChat(data.room_id, data.user_1);
     },
@@ -660,6 +666,15 @@ export default {
     },
     reGetRoom() {
       this.getRoom(this.getUser.userId);
+    },
+    handleLogout() {
+      this.socket.emit("leaveRoom", {
+        room: this.getUser.userId,
+      });
+      this.socket.emit("leaveRoom", {
+        room: this.getRoom,
+      });
+      this.logout();
     },
   },
 };
