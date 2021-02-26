@@ -426,7 +426,7 @@ export default {
       "getUserDetail",
       "getFriendList",
       "getRoomList",
-      "getRoom",
+      "getRoomNow",
     ]),
   },
   // watch: {
@@ -437,6 +437,7 @@ export default {
   created() {
     this.socket.on("chatMessage", (data) => {
       console.log(data);
+      console.log("^^^ ini data chat");
       if (data.chat_content) {
         this.setLiveMsg(data);
       } else if (data.notif) {
@@ -503,7 +504,14 @@ export default {
       "deleteFriend",
       "createRoom",
     ]),
-    ...mapMutations(["setLiveMsg", "setSocket", "pushTyping", "setRoom"]),
+    ...mapMutations([
+      "setLiveMsg",
+      "setSocket",
+      "pushTyping",
+      "setRoom",
+      "clearRoom",
+      "clearMessages",
+    ]),
     show() {
       console.log(this.getUser);
     },
@@ -672,8 +680,10 @@ export default {
         room: this.getUser.userId,
       });
       this.socket.emit("leaveRoom", {
-        room: this.getRoom,
+        room: this.getRoomNow,
       });
+      this.clearMessages();
+      this.clearRoom();
       this.logout();
     },
   },

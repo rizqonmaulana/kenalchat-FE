@@ -251,9 +251,9 @@ export default {
         notif: true,
       };
 
+      this.socket.emit("roomMessage", data);
       this.socket.emit("roomMessage", sendNotif);
 
-      this.socket.emit("roomMessage", data);
       this.postChat(setData);
       this.message = "";
     },

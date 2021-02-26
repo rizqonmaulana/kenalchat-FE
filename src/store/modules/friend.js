@@ -12,6 +12,9 @@ export default {
     setRoom(state, payload) {
       state.roomList = payload;
     },
+    clearRoom(state) {
+      state.roomList = [];
+    },
   },
   actions: {
     getFriend(context, payload) {

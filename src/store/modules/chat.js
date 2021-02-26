@@ -13,8 +13,11 @@ export default {
       state.messages = payload;
       state.room = payload[0].room_id;
     },
-    setRoom(state, payload) {
+    setRoomNow(state, payload) {
       state.room = payload;
+    },
+    clearMessages(state) {
+      state.messages = [];
     },
     setLiveMsg(state, payload) {
       state.messages.push(payload);
@@ -75,8 +78,8 @@ export default {
     getChatByRoom(state) {
       return state.messages;
     },
-    getRoom(state) {
-      return state.room;
+    getRoomNow(state) {
+      return state.roomNow;
     },
     getSocket(state) {
       return state.socket;
