@@ -29,7 +29,9 @@
               type="password"
               name="password"
             />
-            <p class="text-right text-blue mt-4">Forgot password ?</p>
+            <router-link to="/forgot">
+              <p class="text-right text-blue mt-4">Forgot password ?</p>
+            </router-link>
             <button @click="loginUser" class="button btn-blue my-3">
               Login
             </button>

@@ -6,6 +6,7 @@ import Forgot from "../views/auth/ForgotPassword.vue";
 import Chat from "../views/Chat.vue";
 import ActiveAccount from "../views/auth/ActiveAccount.vue";
 import store from "../store/index";
+import Reset from "../views/auth/ResetPassword.vue";
 
 Vue.use(VueRouter);
 
@@ -26,6 +27,12 @@ const routes = [
     path: "/forgot",
     name: "Forgot",
     component: Forgot,
+    meta: { requiresVisitor: true },
+  },
+  {
+    path: "/reset/:key",
+    name: "Reset",
+    component: Reset,
     meta: { requiresVisitor: true },
   },
   {

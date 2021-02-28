@@ -189,7 +189,7 @@ export default {
       chat: "getChatByRoom",
       receiver: "getUserReceiver",
       getSocket: "getSocket",
-      room: "getRoom",
+      room: "getRoomNow",
       typing: "getTyping",
     }),
   },
@@ -229,7 +229,7 @@ export default {
       if (!this.message) {
         return;
       }
-      this.getRoom(this.getUser.userId);
+
       const setData = {
         userIdFrom: this.getUser.userId,
         userIdTo: this.receiver.user_id,
@@ -254,7 +254,9 @@ export default {
       this.socket.emit("roomMessage", data);
       this.socket.emit("roomMessage", sendNotif);
 
-      this.postChat(setData);
+      this.postChat(setData).then(() => {
+        this.getRoom(this.getUser.userId);
+      });
       this.message = "";
     },
     clickMarker(position) {

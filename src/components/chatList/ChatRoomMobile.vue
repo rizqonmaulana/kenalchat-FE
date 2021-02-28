@@ -74,7 +74,7 @@
                 </div>
               </router-link>
               <div
-                @click="logoutAccount"
+                @click="handleLogout"
                 class="d-flex align-items-center my-2 menu-option pointer"
               >
                 <div class="setting-icon text-right mr-2">
@@ -99,8 +99,46 @@
             </h5>
           </div>
         </div>
+        <div class="text-center">
+          <div class="img">
+            <img
+              @click="showProfile"
+              :src="
+                getUserDetail.user_pic === null
+                  ? url + 'user/icon-user.png'
+                  : url + 'user/' + getUserDetail.user_pic
+              "
+              class="profile-img rounded-circle mt-2 pointer"
+            />
+          </div>
+          <h5 class="text-black mt-2 text-profile-name">
+            {{ getUserDetail.user_name }}
+          </h5>
+          <p class="text-grey text-username">
+            {{ getUserDetail.user_email }}
+          </p>
+        </div>
+        <div
+          v-if="profile !== 1"
+          class="d-flex justify-content-between align-items-center mt-3"
+        >
+          <div>
+            <div class="input-border">
+              <span><img src="../../assets/icon-search.png"/></span>
+              <span
+                ><input
+                  class="ml-2"
+                  type="text"
+                  placeholder="Type your message..."
+              /></span>
+            </div>
+          </div>
+          <div>
+            <img src="../../assets/icon-plus.png" />
+          </div>
+        </div>
       </div>
-      <!-- contact list -->
+      <!-- room list -->
       <div v-if="profile !== 1" class="contact-list" style="margin-top: -50px;">
         <div
           v-for="(item, index) in getRoomList"
@@ -175,9 +213,7 @@
                   col
                   cols="12"
                 >
-                  <div
-                    class="card-contact text-center mt-3 d-flex justify-content-between align-items-center"
-                  >
+                  <div class="card-contact text-center mt-3">
                     <div class="position-absolute">
                       <img
                         @click="delFriend(item.user_friend_id)"
@@ -185,30 +221,34 @@
                         class="del-icon"
                       />
                     </div>
-                    <div>
-                      <img
-                        :src="
-                          item.user_pic === null
-                            ? url + 'user/icon-user.png'
-                            : url + 'user/' + item.user_pic
-                        "
-                        class="profile-img rounded-circle"
-                      />
-                    </div>
-                    <div>
-                      <p class="text-black my-2">{{ item.user_name }}</p>
-                    </div>
-                    <div>
-                      <button
-                        class="button btn-blue"
-                        @click="
-                          startChat(item.user_friend_id);
-                          getUserReceiver(item.user_email);
-                          setShowChatMobile();
-                        "
-                      >
-                        Chat
-                      </button>
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <div>
+                        <img
+                          :src="
+                            item.user_pic === null
+                              ? url + 'user/icon-user.png'
+                              : url + 'user/' + item.user_pic
+                          "
+                          class="profile-img rounded-circle"
+                        />
+                      </div>
+                      <div>
+                        <p class="text-black">{{ item.user_name }}</p>
+                      </div>
+                      <div>
+                        <button
+                          class="button btn-blue"
+                          @click="
+                            startChat(item.user_friend_id);
+                            getUserReceiver(item.user_email);
+                            setShowChatMobile();
+                          "
+                        >
+                          Chat
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </b-col>
@@ -219,26 +259,7 @@
       </div>
       <!-- profile -->
       <div v-else style="margin-top: -80px;">
-        <div class="text-center">
-          <div class="img">
-            <img
-              @click="showProfile"
-              :src="
-                getUserDetail.user_pic === null
-                  ? url + 'user/icon-user.png'
-                  : url + 'user/' + getUserDetail.user_pic
-              "
-              class="profile-img rounded-circle mt-2 pointer"
-            />
-          </div>
-          <h5 class="text-black mt-2 text-profile-name">
-            {{ getUserDetail.user_name }}
-          </h5>
-          <p class="text-grey text-username">
-            {{ getUserDetail.user_email }}
-          </p>
-        </div>
-        <h5 class="text-black mt-4">
+        <h5 class="text-black">
           Account
         </h5>
         <p class="text text-black">
@@ -268,7 +289,7 @@
           </div>
         </div>
         <div
-          v-b-modal.my-modalMobile
+          v-b-modal.changePasswordMobile
           class="d-flex hide-outline flex-row align-items-center mb-3"
         >
           <div class="setting-icon text-center">
@@ -344,7 +365,7 @@
         <!-- change password modal -->
         <b-modal
           title="Change Password"
-          id="my-modalMobile"
+          id="changePasswordMobile"
           hide-header
           hide-footer
         >
@@ -410,30 +431,51 @@ export default {
       }),
       room: "",
       oldRoom: "",
-      typing: {
-        isTyping: false,
-      },
       url: process.env.VUE_APP_ROOT_URL_IMAGE,
     };
   },
   computed: {
-    ...mapGetters(["getUser", "getUserDetail", "getFriendList", "getRoomList"]),
+    ...mapGetters([
+      "getUser",
+      "getUserDetail",
+      "getFriendList",
+      "getRoomList",
+      "getRoomNow",
+    ]),
   },
-  watch: {
-    // getRoomList() {
-    //   this.getRoom(this.getUser.userId);
-    // },
-  },
+  // watch: {
+  //   getRoomList() {
+  //     this.getRoom(this.getUser.userId);
+  //   },
+  // },
   created() {
     this.socket.on("chatMessage", (data) => {
-      this.setLiveMsg(data);
-      console.log("pesan baru");
+      console.log(data);
+      console.log("^^^ ini data chat");
+      if (data.chat_content) {
+        this.setLiveMsg(data);
+      } else if (data.notif) {
+        // this.$toasted.success("New message from " + data.username, {
+        //   duration: 1000,
+        // });
+        this.getRoom(this.getUser.userId);
+      }
     });
+
+    this.socket.emit("joinRoom", {
+      username: this.getUser.userName,
+      room: this.getUser.userId,
+    });
+
     this.getContact();
 
     this.getUserByEmail(this.getUser.userEmail);
 
     this.getRoom(this.getUser.userId);
+
+    this.socket.on("typingMessage", (data) => {
+      this.pushTyping(data);
+    });
 
     this.$getLocation()
       .then((coordinates) => {
@@ -476,7 +518,15 @@ export default {
       "deleteFriend",
       "createRoom",
     ]),
-    ...mapMutations(["setLiveMsg", "setSocket", "setShowChatMobile"]),
+    ...mapMutations([
+      "setLiveMsg",
+      "setSocket",
+      "pushTyping",
+      "setRoom",
+      "clearRoom",
+      "clearMessages",
+      "setShowChatMobile",
+    ]),
     show() {
       console.log(this.getUser);
     },
@@ -595,7 +645,6 @@ export default {
 
       this.createRoom(data)
         .then((result) => {
-          console.log(result);
           this.getRoom(this.getUser.userId);
           this.selectRoom(result.data.data);
         })
@@ -604,20 +653,17 @@ export default {
         });
     },
     selectRoom(data) {
-      console.log("MASUK SELECT ROOM");
-      console.log(data);
-      console.log("^^^ INI DATAA");
       if (this.oldRoom) {
-        console.log("sudah pernah masuk ke room " + this.oldRoom);
-        console.log("dan akan masuk ke room " + data.room_id);
+        // console.log("sudah pernah masuk ke room " + this.oldRoom);
+        // console.log("dan akan masuk ke room " + data.room_id);
         this.socket.emit("changeRoom", {
           room: data.room_id,
           oldRoom: this.oldRoom,
         });
         this.oldRoom = data.room_id;
       } else {
-        console.log("belum pernah masuk ke ruang manapun");
-        console.log("dan akan masuk ke room " + data);
+        // console.log("belum pernah masuk ke ruang manapun");
+        // console.log("dan akan masuk ke room " + data);
         this.socket.emit("joinRoom", {
           room: data.room_id,
         });
@@ -629,6 +675,7 @@ export default {
         room_id: data.room_id,
         user_pic: this.getUserDetail.user_pic,
       };
+      this.setRoom(data.room_id);
       this.setSocket(sendToSocket);
       this.getChat(data.room_id, data.user_1);
     },
@@ -643,7 +690,15 @@ export default {
     reGetRoom() {
       this.getRoom(this.getUser.userId);
     },
-    logoutAccount() {
+    handleLogout() {
+      this.socket.emit("leaveRoom", {
+        room: this.getUser.userId,
+      });
+      this.socket.emit("leaveRoom", {
+        room: this.getRoomNow,
+      });
+      this.clearMessages();
+      this.clearRoom();
       this.logout();
     },
   },
@@ -656,7 +711,7 @@ p {
 }
 
 .head {
-  min-height: 100px;
+  min-height: 280px;
 }
 .contact-list {
   height: 58vh;
@@ -674,13 +729,13 @@ p {
 }
 
 .text-username {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 input {
   border: unset;
   color: #848484;
-  font-size: 13px;
+  font-size: 14px;
   background: #fafafa;
   width: 80%;
 }
@@ -700,7 +755,7 @@ input {
 }
 
 .chat-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -715,20 +770,20 @@ input {
 }
 
 .text-time {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .text-notif {
-  font-size: 13px;
+  font-size: 12px;
   color: #fff;
 }
 
 .d-image {
-  width: 17%;
+  width: 25%;
 }
 
 .d-name {
-  width: 78%;
+  width: 70%;
 }
 
 .d-time {
@@ -747,7 +802,7 @@ input {
 }
 
 .setting-menu p {
-  font-size: 13px;
+  font-size: 14px;
   margin-bottom: unset;
   text-decoration: unset;
 }
@@ -803,8 +858,7 @@ input {
   -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.34);
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.34);
   padding: 10px 20px;
-  border-radius: 20px;
-  height: 60px;
+  border-radius: 10px;
 }
 
 .card-contact p {
@@ -818,7 +872,7 @@ input {
 
 .button,
 .btn-blue {
-  padding: 5px 10px;
+  padding: 5px 20px;
   font-size: 12px;
 }
 
@@ -829,8 +883,8 @@ input {
 .del-icon {
   height: 20px;
   width: 20px;
-  margin-left: -30px;
-  margin-top: -45px;
+  margin-left: -35px;
+  margin-top: -30px;
   cursor: pointer;
 }
 

@@ -125,7 +125,30 @@ export default {
             resolve(result);
           })
           .catch((error) => {
-            console.log(error);
+            reject(error.response);
+          });
+      });
+    },
+    forgotPassword(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(`${process.env.VUE_APP_ROOT_URL}/user/forgot`, payload)
+          .then((result) => {
+            resolve(result);
+          })
+          .catch((error) => {
+            reject(error.response);
+          });
+      });
+    },
+    resetPassword(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(`${process.env.VUE_APP_ROOT_URL}/user/reset`, payload)
+          .then((result) => {
+            resolve(result);
+          })
+          .catch((error) => {
             reject(error.response);
           });
       });

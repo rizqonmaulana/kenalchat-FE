@@ -1,18 +1,17 @@
 <template>
   <div>
-    <div v-if="room === ''" class="no-conversation text-center">
-      <p class="text-grey no-chat">Please select a chat to start messaging</p>
-    </div>
-    <div v-else class="conversation">
+    <div class="conversation">
       <div class="header d-flex align-items-center py-3">
-        <img
-          @click="setShowChatMobile()"
-          src="../../assets/icon-back.png"
-          class="mr-2"
-          style="cursor: pointer"
-        />
-        <div class="d-img" v-b-modal.friendProfileMobile>
+        <div class="mr-3">
           <img
+            src="../../assets/icon-back.png"
+            @click="setShowChatMobile"
+            class="back-button"
+          />
+        </div>
+        <div class="d-img">
+          <img
+            v-b-modal.friendProfileMobile
             :src="
               receiver.user_pic === null
                 ? url + 'user/icon-user.png'
@@ -88,7 +87,7 @@
         </div>
       </b-modal>
 
-      <div class="msg-content" id="msg-content">
+      <div class="msg-content-mobile" id="msg-content-mobile">
         <!--  -->
         <div
           v-for="(item, index) in chat"
@@ -135,6 +134,12 @@
             </div>
           </div>
         </div>
+        <p
+          v-if="typing.isTyping && typing.username !== getUser.userName"
+          class="typing-text ml-2"
+        >
+          <em>{{ typing.username }} is typing a message ...</em>
+        </p>
 
         <!--  -->
       </div>
@@ -149,8 +154,10 @@
                 placeholder="Type your message..."
               />
             </div>
-            <div class="icon text-center">
-              <img src="../../assets/icon-plus.png" />
+            <div>
+              <button class="btn-blue" @click="sendMessage">
+                Send
+              </button>
             </div>
           </div>
         </div>
@@ -186,6 +193,8 @@ export default {
       chat: "getChatByRoom",
       receiver: "getUserReceiver",
       getSocket: "getSocket",
+      room: "getRoomNow",
+      typing: "getTyping",
     }),
   },
   watch: {
@@ -225,15 +234,17 @@ export default {
       if (!this.message) {
         return;
       }
-      this.getRoom(this.getUser.userId);
+
+      setTimeout(() => {
+        this.getRoom(this.getUser.userId);
+      }, 300);
+
       const setData = {
         userIdFrom: this.getUser.userId,
         userIdTo: this.receiver.user_id,
         chatContent: this.message,
         roomId: this.getSocket.room_id,
       };
-      console.log("ini data ke db");
-      console.log(setData);
 
       const data = {
         user_id_from: this.getSocket.user_1,
@@ -242,35 +253,19 @@ export default {
         chat_content: this.message,
         room_id: this.getSocket.room_id,
       };
-      console.log("ini data ke socket.io");
-      console.log(data);
-      // [1] menjalankan socket io untuk mendapatkan realtimenya
+
+      const sendNotif = {
+        username: this.getUser.userName,
+        room_id: this.receiver.user_id,
+        notif: true,
+      };
+
       this.socket.emit("roomMessage", data);
+      this.socket.emit("roomMessage", sendNotif);
+
       this.postChat(setData);
-      // [2] menjalankan proses axios post data ke table chat
-      // this.postMessage(setData);
       this.message = "";
     },
-    // selectRoom(data) {
-    //   if (this.oldRoom) {
-    //     console.log("sudah pernah masuk ke room " + this.oldRoom);
-    //     console.log("dan akan masuk ke room " + data);
-    //     this.socket.emit("changeRoom", {
-    //       username: this.getUser.userName,
-    //       room: data,
-    //       oldRoom: this.oldRoom,
-    //     });
-    //     this.oldRoom = data;
-    //   } else {
-    //     console.log("belum pernah masuk ke ruang manapun");
-    //     console.log("dan akan masuk ke room " + data);
-    //     this.socket.emit("joinRoom", {
-    //       username: this.getUser.userName,
-    //       room: data,
-    //     });
-    //     this.oldRoom = data;
-    //   }
-    // },
     clickMarker(position) {
       this.coordinate = {
         lat: position.latLng.lat(),
@@ -279,8 +274,8 @@ export default {
     },
     scroll() {
       document.getElementById(
-        "msg-content"
-      ).scrollTop = document.getElementById("msg-content").scrollHeight;
+        "msg-content-mobile"
+      ).scrollTop = document.getElementById("msg-content-mobile").scrollHeight;
     },
   },
   updated() {
@@ -302,7 +297,7 @@ export default {
   outline: none !important;
 }
 
-.msg-content {
+.msg-content-mobile {
   height: 80vh;
   background-color: #fafafa;
   border-radius: 10px;
@@ -343,7 +338,7 @@ p {
 }
 
 .text-status {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .msg-bar {
@@ -360,12 +355,8 @@ p {
   border-radius: 10px;
 }
 
-.input-msg img {
-  width: 20px;
-}
-
 .input-msg .msg {
-  width: 97%;
+  width: 90%;
 }
 
 .input-msg .icon {
@@ -375,30 +366,30 @@ p {
 
 input {
   border: unset;
-  font-size: 12px;
+  font-size: 14px;
   color: #7d7d7d;
-  width: 100%;
+  width: 95%;
   background: #fafafa;
 }
 
-.msg-content .profile-img-chat {
+.msg-content-mobile .profile-img-chat {
   width: 35px;
   height: 35px;
 }
 
-.msg-content .left .msg {
+.msg-content-mobile .left .msg {
   background-color: #7e98df;
   border-radius: 20px 20px 20px 3px;
   padding: 8px 15px;
-  font-size: 12px;
+  font-size: 14px;
   max-width: 40vw;
 }
 
-.msg-content .right .msg {
+.msg-content-mobile .right .msg {
   background-color: #fff;
   border-radius: 20px 20px 3px 20px;
   padding: 8px 15px;
-  font-size: 12px;
+  font-size: 14px;
   max-width: 40vw;
 }
 
@@ -406,6 +397,23 @@ input {
   width: 100px;
   height: 100px;
 }
+
+.typing-text {
+  font-size: 14px;
+  color: rgb(169, 169, 169);
+}
+
+.back-button {
+  cursor: pointer;
+}
+
+.button,
+.btn-blue {
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
 @media (max-width: 992px) {
   .d-name {
     margin-left: 40px;

@@ -79,7 +79,7 @@ export default {
       return state.messages;
     },
     getRoomNow(state) {
-      return state.roomNow;
+      return state.room;
     },
     getSocket(state) {
       return state.socket;

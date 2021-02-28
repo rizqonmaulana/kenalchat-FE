@@ -430,9 +430,9 @@ export default {
     ]),
   },
   // watch: {
-  // getRoomList() {
-  //   this.getRoom(this.getUser.userId);
-  // },
+  //   getRoomList() {
+  //     this.getRoom(this.getUser.userId);
+  //   },
   // },
   created() {
     this.socket.on("chatMessage", (data) => {
@@ -441,9 +441,9 @@ export default {
       if (data.chat_content) {
         this.setLiveMsg(data);
       } else if (data.notif) {
-        this.$toasted.success("New message from " + data.username, {
-          duration: 1000,
-        });
+        // this.$toasted.success("New message from " + data.username, {
+        //   duration: 1000,
+        // });
         this.getRoom(this.getUser.userId);
       }
     });

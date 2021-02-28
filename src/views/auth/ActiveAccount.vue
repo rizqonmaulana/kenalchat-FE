@@ -24,7 +24,7 @@ export default {
       this.activeAccount(this.key)
         .then((result) => {
           this.successAlert(result.data.msg);
-          this.$router.push("/");
+          this.$router.push("/login");
         })
         .catch((error) => {
           this.errorAlert(error.data.msg);
