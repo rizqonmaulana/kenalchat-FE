@@ -32,9 +32,9 @@ Kenal is a web-based realtime chat application, with Kenal we can make friends w
 4. Add .env file at root folder project
 
 ```sh
-VUE_APP_ROOT_URL=https://backend-rizqon.fwebdev.online/apikenal
-VUE_APP_ROOT_URL_SOCKET=https://backend-rizqon.fwebdev.online
-VUE_APP_ROOT_URL_IMAGE=https://backend-rizqon.fwebdev.online/apikenal/fileupload/
+VUE_APP_ROOT_URL=https://agile-ocean-22805.herokuapp.com/apikenal
+VUE_APP_ROOT_URL_SOCKET=https://agile-ocean-22805.herokuapp.com
+VUE_APP_ROOT_URL_IMAGE=https://agile-ocean-22805.herokuapp.com/apikenal/fileupload/
 ```
 
 5. Type `npm run serve`
